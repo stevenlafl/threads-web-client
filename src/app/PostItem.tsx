@@ -18,14 +18,22 @@ export default function PostItem(props: any) {
 
   const hasChildren = props.hasChildren;
   const hasParent = props.hasParent;
+  const isQuoted = props.isQuoted;
   const levels = props.levels;
 
   console.log(hasChildren, hasParent, levels)
 
   console.log(item);
   let post = item.posts[0];
+  let attachment = null;
 
   const isRepost = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.reposted_post;
+  const hasQuoted = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.quoted_post;
+
+  const hasAttachment = post.text_post_app_info && post.text_post_app_info.link_preview_attachment
+  if (hasAttachment) {
+    attachment = post.text_post_app_info.link_preview_attachment
+  }
   
   let repostUser = null;
   if (isRepost) {
@@ -79,6 +87,11 @@ export default function PostItem(props: any) {
             {user.username} replied
           </div>
         }
+        {(hasQuoted) && 
+          <div className="text-sm text-gray-500 pb-2">
+            {user.username} quoted
+          </div>
+        }
         <div className="flex items-center">
           <div>
             <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
@@ -96,13 +109,10 @@ export default function PostItem(props: any) {
   </div>
   <div className={(hasParent) ? "px-20" : "px-16"}>
     <Link href={"/post/" + id} target="_blank">
-      <p className="text-base width-auto font-medium text-white flex-shrink">
+      <p className="text-base width-auto font-medium text-white flex-shrink whitespace-pre-line">
         {(post.caption) &&
           post.caption.text
         }
-      </p>
-    </Link>
-      <p className="text-base width-auto font-medium text-white flex-shrink">
         {((videos === null || videos.length === 0 )&& images.length > 0 && !images[0].url.includes('null.jpg')) &&
           <Link href={images[0].url} target="_blank">
             <Image className="mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
@@ -113,6 +123,27 @@ export default function PostItem(props: any) {
             <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
           </video>
         }
+      </p>
+      {(hasQuoted) && 
+        <div className="border-1">
+          <PostItem item={{posts: [post.text_post_app_info.share_info.quoted_post]}} token={token} hasChildren={true} isQuoted={true}/>
+        </div>
+      }
+    </Link>
+      <p className="text-base width-auto font-medium text-white flex-shrink">
+      {(hasAttachment) &&
+        <div>
+          <Link href={attachment.url} target="_blank">
+            <Image className="mt-4" src={attachment.image_url} width="500" height="100" alt={''} />
+            <div className="text-sm text-gray-500">
+              {attachment.display_url}
+            </div>
+            <div>
+              {attachment.title}
+            </div>
+          </Link>
+        </div>
+      }
       </p>
       <div className="flex">
           <div className="w-full">
