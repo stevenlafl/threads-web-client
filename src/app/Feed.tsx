@@ -119,7 +119,7 @@ export default function Feed(props: any) {
       }
       <div>
         <PostForm token={token} addPost={addPost} post_id={post_id} />
-        <hr className="border-gray-800 border-4" />
+        <hr className="border-bg-[#343638]" />
       </div>
       <div>
         {items}
