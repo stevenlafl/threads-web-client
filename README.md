@@ -36,3 +36,7 @@ Todo:
 ### Credits
 
 Uses NextJS and threads.js at the core
+
+For the frontend tailwind work, this great UI by @hiravesonali
+
+https://tailwindcomponents.com/component/twitter-clone

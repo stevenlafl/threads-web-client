@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@threadsjs/threads.js": "^1.5.4",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",
@@ -17,10 +18,12 @@
     "eslint": "8.44.0",
     "eslint-config-next": "13.4.9",
     "http-proxy": "^1.18.1",
+    "javascript-time-ago": "^2.5.9",
     "next": "13.4.9",
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-time-ago": "^7.2.1",
     "tailwindcss": "3.3.2",
     "typescript": "5.1.6"
   }

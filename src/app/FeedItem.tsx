@@ -6,6 +6,12 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
+import TimeAgo from 'javascript-time-ago'
+import ReactTimeAgo from 'react-time-ago'
+import en from 'javascript-time-ago/locale/en.json'
+
+TimeAgo.addDefaultLocale(en)
+
 type FeedState = {
   item: any;
   loaded: boolean;
@@ -30,7 +36,6 @@ export default function FeedItem(props: any) {
 
   // convert unix timestamp to readable time
   const date = new Date(post.taken_at * 1000);
-  const formattedDate = date.toLocaleString();
 
   return (
     <>
@@ -49,7 +54,7 @@ export default function FeedItem(props: any) {
             <p className="text-base leading-6 font-medium text-white">
               {user.full_name}
               <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
-                @{user.username} - {formattedDate}
+                @{user.username} - <ReactTimeAgo date={date} locale="en-US" />
               </span>
             </p>
           </div>
@@ -98,7 +103,11 @@ export default function FeedItem(props: any) {
 
                   <div className="flex-1 text-center py-2 m-2">
                       <a href="#" className="mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300">
-                          <svg className="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                          {(post.has_liked) ?
+                            <svg className="text-center h-7 w-6" fill="gray" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                            :
+                            <svg className="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                          }
                           <span>
                             {post.like_count}
                           </span>
@@ -127,7 +136,7 @@ export default function FeedItem(props: any) {
       </div>
       
     </div>
-    {/* <textarea defaultValue={JSON.stringify(post, null, 2)}></textarea> */}
+    <textarea defaultValue={JSON.stringify(post, null, 2)}></textarea>
     <hr className="border-gray-600"></hr>
     </>
   )
