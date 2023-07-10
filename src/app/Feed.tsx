@@ -66,8 +66,7 @@ export default function Feed(props: any) {
       else {
         const fetchPrevFeed = ((Date.now()/1000) - lastPrevFeed) > 60*5;
 
-        console.log(prevFeed, fetchPrevFeed);
-        if (!prevFeed || fetchPrevFeed) {
+        if (!prevFeed || fetchPrevFeed || nextMaxId) {
           const response = await fetch('/api/feed', {
             method: 'POST',
             body: JSON.stringify({
@@ -81,8 +80,10 @@ export default function Feed(props: any) {
           data = await response.json();
 
           // Main feed, set into cache.
-          dispatch(setFeed(data));
-          dispatch(setLastFeed(Date.now()/1000));
+          if (!nextMaxId) {
+            dispatch(setFeed(data));
+            dispatch(setLastFeed(Date.now()/1000));
+          }
         }
         else {
           data = prevFeed;
@@ -143,7 +144,7 @@ export default function Feed(props: any) {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     }
-  }, [isLoading]);
+  }, [isLoading, nextMaxId]);
 
   return (
     <>
