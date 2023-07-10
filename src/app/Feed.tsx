@@ -22,6 +22,10 @@ export default function Feed(props: any) {
     if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) {
       return;
     }
+
+    if (nextMaxId === null || nextMaxId === undefined) {
+      return;
+    }
     
     fetchData();
   };
@@ -48,6 +52,8 @@ export default function Feed(props: any) {
         setThread(
           <FeedItem key={data.containing_thread.id} item={data.containing_thread}/>
         )
+        
+        setNextMaxId(data.paging_tokens.downwards);
       }
       else {
         const response = await fetch('/api/feed', {
@@ -61,13 +67,18 @@ export default function Feed(props: any) {
           }
         })
         data = await response.json();
+        
+        setNextMaxId(data.next_max_id);
       }
-
-      setNextMaxId(data.next_max_id);
 
       const newItems = [] as JSX.Element[];
       for (let item of data.items) {
-        if (item.posts.length > 0) {
+        let exists = items.reduce((acc, cur) => {
+          if (cur.key == item.id) return true;
+          return acc;
+        }, false);
+
+        if (item.posts.length > 0 && !exists) {
           newItems.push(
             <FeedItem key={item.id} item={item}/>
           )
@@ -101,6 +112,7 @@ export default function Feed(props: any) {
 
   return (
     <>
+    {nextMaxId}
       {(post_id) && 
         <div>
           {thread}

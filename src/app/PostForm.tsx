@@ -16,16 +16,34 @@ export default function LoginForm(props: any) {
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    const response = await fetch('/api/post', {
-      method: 'POST',
-      body: JSON.stringify({
-        token: token,
-        text: e.target.text.value,
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((res) => res.json());
+    
+    let response = {} as any;
+
+    if (post_id) {
+      response = await fetch('/api/reply', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          post_id: post_id,
+          text: e.target.text.value,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
+    }
+    else {
+      response = await fetch('/api/post', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          text: e.target.text.value,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
+    }
 
     addPost(response.token.media);
     setText("")
