@@ -1,17 +1,20 @@
 import { cookies } from 'next/headers'
 import Link from 'next/link';
-import LoginForm from './LoginForm';
+import LoginForm from '../../LoginForm';
 import Feed from '@/app/Feed';
 
-export default async function Home() {
+export default function Page({ params }: { params: { slug: string } }) {
+
   const cookieStore = cookies();
   const tokenCookie = cookieStore.get('token');
+
+  const post_id = params.slug;
 
   if (tokenCookie) {
     const token = tokenCookie.value as string;
 
     return (
-      <Feed token={token} post_id={null}/>
+      <Feed token={token} post_id={post_id}/>
     )
   }
 

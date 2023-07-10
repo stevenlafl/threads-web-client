@@ -19,12 +19,11 @@ type FeedState = {
 
 export default function FeedItem(props: any) {
   const item = props.item;
-  let post = item.posts[0];
 
-  console.log(post);
+  console.log(item);
+  let post = item.posts[0];
+  let id = (post.id as string).split('_')[0];
   let user = post.user;
-  const images = (post.image_versions2 && post.image_versions2.candidates) ? post.image_versions2.candidates : [];
-  const videos = (post.video_versions) ? post.video_versions : [];
 
   const isRepost = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.reposted_post;
 
@@ -36,6 +35,10 @@ export default function FeedItem(props: any) {
     user = post.user;
   }
 
+  const images = (post.image_versions2 && post.image_versions2.candidates) ? post.image_versions2.candidates : [];
+  const videos = (post.video_versions) ? post.video_versions : [];
+
+  console.log(post);
   // convert unix timestamp to readable time
   const date = new Date(post.taken_at * 1000);
 
@@ -64,13 +67,15 @@ export default function FeedItem(props: any) {
       </div>
   </div>
   <div className="pl-16 pr-16">
+    <Link href={"/post/" + id} target="_blank">
       <p className="text-base width-auto font-medium text-white flex-shrink">
         {(post.caption) &&
           post.caption.text
         }
       </p>
+    </Link>
       <p className="text-base width-auto font-medium text-white flex-shrink">
-        {(!videos && images.length > 0 && !images[0].url.includes('null.jpg')) &&
+        {((videos === null || videos.length === 0 )&& images.length > 0 && !images[0].url.includes('null.jpg')) &&
           <Link href={images[0].url} target="_blank">
             <Image className="mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
           </Link>

@@ -38,3 +38,4 @@ next-env.d.ts
 feed.json*
 recommends.json*
 post.json*
+post_fetch.json*

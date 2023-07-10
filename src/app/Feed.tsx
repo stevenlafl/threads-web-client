@@ -10,6 +10,7 @@ import PostForm from './PostForm';
 
 export default function Feed(props: any) {
   const token = props.token;
+  const post_id = props.post_id;
 
   const [items, setItems] = useState([] as JSX.Element[]);
   const [nextMaxId, setNextMaxId] = useState(null as string | null);
@@ -28,25 +29,42 @@ export default function Feed(props: any) {
     setIsLoading(true);
   
     try {
-      const response = await fetch('/api/feed', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          max_id: nextMaxId
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const data = await response.json();
+      let data = {} as any;
+      if (post_id) {
+        const response = await fetch('/api/post/' + post_id, {
+          method: 'POST',
+          body: JSON.stringify({
+            token: token,
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        data = await response.json();
+      }
+      else {
+        const response = await fetch('/api/feed', {
+          method: 'POST',
+          body: JSON.stringify({
+            token: token,
+            max_id: nextMaxId
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        data = await response.json();
+      }
 
       setNextMaxId(data.next_max_id);
 
       const newItems = [] as JSX.Element[];
       for (let item of data.items) {
-        newItems.push(
-          <FeedItem key={item.id} item={item}/>
-        )
+        if (item.posts.length > 0) {
+          newItems.push(
+            <FeedItem key={item.id} item={item}/>
+          )
+        }
       }
   
       setItems(prevItems => [...prevItems, ...newItems]);
