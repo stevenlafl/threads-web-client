@@ -1,5 +1,5 @@
 {
-  "name": "threads-client",
+  "name": "threads-web-client",
   "version": "0.1.0",
   "private": true,
   "scripts": {

@@ -1,4 +1,4 @@
-import * as httpProxy from 'http-proxy'
+const httpProxy = require('http-proxy')
 import { NextRequest, NextResponse } from 'next/server'
 
 const proxy = httpProxy.createProxyServer()

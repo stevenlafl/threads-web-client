@@ -25,7 +25,7 @@ export default async function Home() {
         <h1 className="text-3xl font-bold text-center text-gray-700">Logo</h1>
         <LoginForm />
         <p className="mt-4 text-sm text-center text-gray-700">
-          Don't have an account?{" "}
+          Don&apos;t have an account?{" "}
           <Link
             href="/signup"
             className="font-medium text-blue-600 hover:underline"
