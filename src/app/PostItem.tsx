@@ -117,11 +117,11 @@ export default function PostItem(props: any) {
         }
         {((videos === null || videos.length === 0 )&& images.length > 0 && !images[0].url.includes('null.jpg')) &&
           <Link href={images[0].url} target="_blank">
-            <Image className="mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
+            <Image className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
           </Link>
         }
         {(videos !== null && videos.length > 0) &&
-          <video className="mt-4" controls loop>
+          <video className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" controls loop>
             <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
           </video>
         }
