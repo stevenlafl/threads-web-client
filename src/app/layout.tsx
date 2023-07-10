@@ -21,10 +21,10 @@ export default function RootLayout({
   const cookieStore = cookies();
   const tokenCookie = cookieStore.get('token');
   const usernameCookie = cookieStore.get('username');
-  
-  const profileURL = `https://threads.net/@${usernameCookie.value}`;
 
   if (tokenCookie) {
+    const profileURL = `https://threads.net/@${usernameCookie!.value}`;
+    
     return (
       <html lang="en">
         <body className={inter.className + ' flex items-center justify-center bg-[#101010]'}>
@@ -77,7 +77,7 @@ export default function RootLayout({
                                 
                             </p>
                             <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                            <Link href={profileURL} target='_blank'>@{usernameCookie.value}</Link>
+                            <Link href={profileURL} target='_blank'>@{usernameCookie!.value}</Link>
                             </p>
                           </div>
                       </div>
