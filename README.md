@@ -1,6 +1,6 @@
 # Instagram Threads Web Client
 
-This project provides a desktop web client for Threads.
+This project provides a desktop web client for Threads. Meta is too slow to implement, so I'm working on it. Mobile is not the best experience to work with.
 
 ## Getting Started
 
@@ -19,6 +19,9 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Now you are presented with a login screen. Enter your credentials. Then you will see something like this:
 
 ![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
+
+## To-do
+
 
 ### Credits
 

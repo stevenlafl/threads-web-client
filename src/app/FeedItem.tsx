@@ -127,7 +127,7 @@ export default function FeedItem(props: any) {
       </div>
       
     </div>
-    <textarea defaultValue={JSON.stringify(post, null, 2)}></textarea>
+    {/* <textarea defaultValue={JSON.stringify(post, null, 2)}></textarea> */}
     <hr className="border-gray-600"></hr>
     </>
   )
