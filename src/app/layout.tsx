@@ -94,8 +94,6 @@ export default function RootLayout({
                       </div>
                   </div>
                 <hr className="border-gray-600" />
-                <PostForm token={tokenCookie} />
-                <hr className="border-gray-800 border-4" />
                 {children}
               </div>
               <div className="w-2/5 h-12">

@@ -6,6 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import FeedItem from './FeedItem';
+import PostForm from './PostForm';
 
 export default function Feed(props: any) {
   const token = props.token;
@@ -56,6 +57,11 @@ export default function Feed(props: any) {
     }
   };
 
+  const addPost = (item: any) => {
+    const newPost = <FeedItem key={item.id} item={{posts: [item]}}/>
+    setItems(prevItems => [newPost, ...prevItems])
+  }
+
   useEffect(() => {
     if (isFirstLoad) {
       setIsFirstLoad(false);
@@ -69,6 +75,14 @@ export default function Feed(props: any) {
   }, [isLoading]);
 
   return (
-    <div>{items}</div>
+    <>
+      <div>
+        <PostForm token={token} addPost={addPost} />
+        <hr className="border-gray-800 border-4" />
+      </div>
+      <div>
+        {items}
+      </div>
+    </>
   )
 }

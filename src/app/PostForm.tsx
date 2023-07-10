@@ -6,8 +6,8 @@ import { useState } from 'react';
 export default function LoginForm(props: any) {
 
   const [text, setText] = useState("");
-
   const token = props.token;
+  const addPost: any = props.addPost;
 
   async function handleChange(e: any) {
     setText(e.target.value);
@@ -18,7 +18,7 @@ export default function LoginForm(props: any) {
     const response = await fetch('/api/post', {
       method: 'POST',
       body: JSON.stringify({
-        token: token.value,
+        token: token,
         text: e.target.text.value,
       }),
       headers: {
@@ -26,6 +26,7 @@ export default function LoginForm(props: any) {
       }
     }).then((res) => res.json());
 
+    addPost(response.token.media);
     setText("")
   }
 

@@ -20,11 +20,13 @@ type FeedState = {
 export default function FeedItem(props: any) {
   const item = props.item;
   let post = item.posts[0];
-  let user = post.user;
-  const images = (post.image_versions2 !== null && post.image_versions2.candidates) ? post.image_versions2.candidates : [];
-  const videos = (post.video_versions !== null) ? post.video_versions : [];
 
-  const isRepost = post.text_post_app_info !== null && post.text_post_app_info.share_info !== null && post.text_post_app_info.share_info.reposted_post !== null;
+  console.log(post);
+  let user = post.user;
+  const images = (post.image_versions2 && post.image_versions2.candidates) ? post.image_versions2.candidates : [];
+  const videos = (post.video_versions) ? post.video_versions : [];
+
+  const isRepost = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.reposted_post;
 
   let repostUser = null;
   if (isRepost) {
@@ -74,7 +76,7 @@ export default function FeedItem(props: any) {
           </Link>
         }
         {(videos !== null && videos.length > 0) &&
-          <video className="mt-4" controls>
+          <video className="mt-4" controls loop>
             <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
           </video>
         }
