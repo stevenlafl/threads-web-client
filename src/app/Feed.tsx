@@ -112,7 +112,6 @@ export default function Feed(props: any) {
 
   return (
     <>
-    {nextMaxId}
       {(post_id) && 
         <div>
           {thread}
