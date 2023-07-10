@@ -26,12 +26,13 @@ Right now this just displays the regular feed with likes and reply counts. It di
 
 Todo:
 
-1. Add thread viewing
-2. Add posting
-3. Add replying
-4. Add liking
-5. Add reposting
-6. ???
+1. ~~View threads~~
+2. ~~View replies~~
+3. ~~Add posting~~
+4. ~~Add replying~~
+5. Add liking
+6. Add reposting
+7. ???
 
 ### Credits
 
