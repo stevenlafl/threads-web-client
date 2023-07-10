@@ -7,6 +7,7 @@ export default function LoginForm(props: any) {
 
   const [text, setText] = useState("");
   const token = props.token;
+  const post_id = props.post_id;
   const addPost: any = props.addPost;
 
   async function handleChange(e: any) {
