@@ -123,24 +123,23 @@ export default function RootLayout({
                   </button>
                 </nav>
                 <div className="flex-shrink-0 flex hover:bg-gray-00 rounded-full p-4 mt-12 mr-2">
-                  <a href="#" className="flex-shrink-0 group block">
-                    <div className="flex items-center">
-                      {/* <div> */}
-                      {/* <img className="inline-block h-10 w-10 rounded-full" src="" alt="" /> */}
-                      {/* </div> */}
-                      <div className="ml-3">
-                        <p className="text-base leading-6 font-medium text-white"></p>
-                        <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                          <Link href={profileURL} target="_blank">
-                            @{usernameCookie!.value}
-                          </Link>
-                        </p>
+                    <Link href={profileURL} target="_blank" className="flex-shrink-0 group block">
+                      <div className="flex items-center">
+                          <div>
+                            {/* <img className="inline-block h-10 w-10 rounded-full" src="" alt="" /> */}
+                          </div>
+                          <div className="ml-3">
+                            <p className="text-base leading-6 font-medium text-white">
+                                
+                            </p>
+                            <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
+                              @{usernameCookie!.value}
+                            </p>
+                          </div>
                       </div>
-                    </div>
-                  </a>
+                    </Link>
                 </div>
               </div>
-
               <div className="w-3/5 border border-[#343638] h-auto  border-t-0">
                 <div className="flex">
                   <div className="flex-1 m-2">
