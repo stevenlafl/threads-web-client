@@ -50,7 +50,7 @@ export default function Feed(props: any) {
         data.items = data.reply_threads;
 
         setThread(
-          <FeedItem key={data.containing_thread.id} item={data.containing_thread}/>
+          <FeedItem key={data.containing_thread.id} token={token} item={data.containing_thread}/>
         )
         
         setNextMaxId(data.paging_tokens.downwards);

@@ -30,8 +30,11 @@ Todo:
 2. ~~View replies~~
 3. ~~Add posting~~
 4. ~~Add replying~~
-5. View repost
-6. Add liking
+5. ~~View images~~
+6. ~~View videos~~
+7. ~~View quotes~~
+5. ~~View repost~~
+6. ~~Add liking~~
 7. Add reposting
 8. ???
 

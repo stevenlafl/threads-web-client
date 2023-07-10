@@ -18,14 +18,22 @@ export default function PostItem(props: any) {
 
   const hasChildren = props.hasChildren;
   const hasParent = props.hasParent;
+  const isQuoted = props.isQuoted;
   const levels = props.levels;
 
   console.log(hasChildren, hasParent, levels)
 
   console.log(item);
   let post = item.posts[0];
+  let attachment = null;
 
   const isRepost = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.reposted_post;
+  const hasQuoted = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.quoted_post;
+
+  const hasAttachment = post.text_post_app_info && post.text_post_app_info.link_preview_attachment
+  if (hasAttachment) {
+    attachment = post.text_post_app_info.link_preview_attachment
+  }
   
   let repostUser = null;
   if (isRepost) {
@@ -45,6 +53,7 @@ export default function PostItem(props: any) {
 
   // States
   const [liked, setLiked] = useState(post.has_liked);
+  const [likeCount, setLikeCount] = useState(post.like_count);
 
   async function likePost(e: any) {
     e.preventDefault();
@@ -62,6 +71,7 @@ export default function PostItem(props: any) {
 
     if (response.status === 'ok') {
       setLiked(true);
+      setLikeCount(likeCount + 1);
     }
   }
 
@@ -77,6 +87,11 @@ export default function PostItem(props: any) {
         {(hasParent) && 
           <div className="text-sm text-gray-500 pb-2">
             {user.username} replied
+          </div>
+        }
+        {(hasQuoted) && 
+          <div className="text-sm text-gray-500 pb-2">
+            {user.username} quoted
           </div>
         }
         <div className="flex items-center">
@@ -96,13 +111,10 @@ export default function PostItem(props: any) {
   </div>
   <div className={(hasParent) ? "px-20" : "px-16"}>
     <Link href={"/post/" + id} target="_blank">
-      <p className="text-base width-auto font-medium text-white flex-shrink">
+      <p className="text-base width-auto font-medium text-white flex-shrink whitespace-pre-line">
         {(post.caption) &&
           post.caption.text
         }
-      </p>
-    </Link>
-      <p className="text-base width-auto font-medium text-white flex-shrink">
         {((videos === null || videos.length === 0 )&& images.length > 0 && !images[0].url.includes('null.jpg')) &&
           <Link href={images[0].url} target="_blank">
             <Image className="mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
@@ -113,6 +125,27 @@ export default function PostItem(props: any) {
             <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
           </video>
         }
+      </p>
+      {(hasQuoted) && 
+        <div className="border-1">
+          <PostItem item={{posts: [post.text_post_app_info.share_info.quoted_post]}} token={token} hasChildren={true} isQuoted={true}/>
+        </div>
+      }
+    </Link>
+      <p className="text-base width-auto font-medium text-white flex-shrink">
+      {(hasAttachment) &&
+        <div>
+          <Link href={attachment.url} target="_blank">
+            <Image className="mt-4" src={attachment.image_url} width="500" height="100" alt={''} />
+            <div className="text-sm text-gray-500">
+              {attachment.display_url}
+            </div>
+            <div>
+              {attachment.title}
+            </div>
+          </Link>
+        </div>
+      }
       </p>
       <div className="flex">
           <div className="w-full">
@@ -143,7 +176,7 @@ export default function PostItem(props: any) {
                             <svg className="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                           }
                           <span>
-                            {post.like_count}
+                            {likeCount}
                           </span>
                       </a>
                   </div>
