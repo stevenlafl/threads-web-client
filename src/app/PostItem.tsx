@@ -53,6 +53,7 @@ export default function PostItem(props: any) {
 
   // States
   const [liked, setLiked] = useState(post.has_liked);
+  const [likeCount, setLikeCount] = useState(post.like_count);
 
   async function likePost(e: any) {
     e.preventDefault();
@@ -70,6 +71,7 @@ export default function PostItem(props: any) {
 
     if (response.status === 'ok') {
       setLiked(true);
+      setLikeCount(likeCount + 1);
     }
   }
 
@@ -174,7 +176,7 @@ export default function PostItem(props: any) {
                             <svg className="text-center h-7 w-6" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                           }
                           <span>
-                            {post.like_count}
+                            {likeCount}
                           </span>
                       </a>
                   </div>
