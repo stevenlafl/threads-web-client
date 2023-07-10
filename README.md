@@ -20,8 +20,18 @@ Now you are presented with a login screen. Enter your credentials. Then you will
 
 ![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
 
-## To-do
+## Roadmap
 
+Right now this just displays the regular feed with likes and reply counts. It displays images and it displays video properly.
+
+Todo:
+
+1. Add thread viewing
+2. Add posting
+3. Add replying
+4. Add liking
+5. Add reposting
+6. ???
 
 ### Credits
 
