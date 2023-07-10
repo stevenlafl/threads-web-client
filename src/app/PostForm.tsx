@@ -56,7 +56,7 @@ export default function LoginForm(props: any) {
               {/* <img className="inline-block h-10 w-10 rounded-full" src="" alt="" /> */}
           </div>
           <div className="flex-1 px-2 pt-2 mt-2">
-              <textarea className=" bg-transparent text-gray-400 font-medium text-lg w-full" rows={2} cols={50} placeholder="What's happening?" name="text" value={text} onChange={handleChange}></textarea>
+              <textarea className=" bg-transparent text-[#5F5F5F] font-medium text-lg w-full" rows={2} cols={50} placeholder="What's happening?" name="text" value={text} onChange={handleChange}></textarea>
           </div>                    
       </div>
       <div className="flex">
