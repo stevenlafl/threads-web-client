@@ -7,50 +7,64 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import FeedItem from './FeedItem';
 
-
-type FeedState = {
-  feed: JSX.Element[];
-  loaded: boolean;
-}
-
 export default function Feed(props: any) {
   const token = props.token;
-  const router = useRouter();
 
-  const [state, setState] = useState(
-    {
-      feed: [],
-      loaded: false,
-    } as FeedState
-  );
+  const [items, setItems] = useState([] as JSX.Element[]);
+  const [nextMaxId, setNextMaxId] = useState(null as string | null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  useEffect(() => {
-    if (state.loaded == false) {
-      fetch('/api/feed', {
+  const handleScroll = () =>  {
+    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) {
+      return;
+    }
+    
+    fetchData();
+  };
+
+  const fetchData = async () => {
+    setIsLoading(true);
+  
+    try {
+      const response = await fetch('/api/feed', {
         method: 'POST',
         body: JSON.stringify({
           token: token,
+          max_id: nextMaxId
         }),
         headers: {
           'Content-Type': 'application/json'
         }
-      }).then((res) => res.json()).then((res) => {
+      })
+      const data = await response.json();
 
-        state.loaded = true;
-        state.feed = [];
-        
-        for (let item of res.items) {
-          state.feed.push(
-            <FeedItem key={item.id} item={item}/>
-          )
-        }
+      setNextMaxId(data.next_max_id);
 
-        setState({...state});
-      });
+      const newItems = [] as JSX.Element[];
+      for (let item of data.items) {
+        newItems.push(
+          <FeedItem key={item.id} item={item}/>
+        )
+      }
+  
+      setItems(prevItems => [...prevItems, ...newItems]);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
     }
-  });
+  };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [isLoading]);
 
   return (
-    <div>{state.feed}</div>
+    <div>{items}</div>
   )
 }
