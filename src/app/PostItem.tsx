@@ -24,18 +24,17 @@ export default function PostItem(props: any) {
 
   console.log(item);
   let post = item.posts[0];
-  let id = (post.id as string).split('_')[0];
-  let user = post.user;
 
   const isRepost = post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.reposted_post;
-
+  
   let repostUser = null;
   if (isRepost) {
-    repostUser = user;
-    
+    repostUser = post.user;
     post = post.text_post_app_info.share_info.reposted_post;
-    user = post.user;
   }
+
+  let id = (post.id as string).split('_')[0];
+  let user = post.user;
 
   const images = (post.image_versions2 && post.image_versions2.candidates) ? post.image_versions2.candidates : [];
   const videos = (post.video_versions) ? post.video_versions : [];
