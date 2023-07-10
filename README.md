@@ -2,7 +2,19 @@
 
 This project provides a desktop web client for Threads. Meta is too slow to implement, so I'm working on it. Mobile is not the best experience to work with.
 
-## Getting Started
+## Running
+
+```
+docker run -it -p 3000:3000 stevenlafl/threads-web-client:latest
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+Now you are presented with a login screen. Enter your credentials. Then you will see something like this:
+
+![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
+
+## Contributing
 
 First, run the development server:
 
@@ -14,11 +26,7 @@ yarn dev
 pnpm dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-Now you are presented with a login screen. Enter your credentials. Then you will see something like this:
-
-![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
+Then it's the same steps as above, minus the docker portion. Everything should behave like a standard NextJS project.
 
 ## Roadmap
 
