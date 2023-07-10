@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build -t stevenlafl/threads-web-client .
+docker build --no-cache -t stevenlafl/threads-web-client:latest - < Dockerfile
