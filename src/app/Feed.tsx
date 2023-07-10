@@ -13,6 +13,7 @@ export default function Feed(props: any) {
   const [items, setItems] = useState([] as JSX.Element[]);
   const [nextMaxId, setNextMaxId] = useState(null as string | null);
   const [isLoading, setIsLoading] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const handleScroll = () =>  {
     if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) {
@@ -56,7 +57,10 @@ export default function Feed(props: any) {
   };
 
   useEffect(() => {
-    fetchData();
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
+      fetchData();
+    }
   }, []);
 
   useEffect(() => {

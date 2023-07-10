@@ -37,4 +37,4 @@ next-env.d.ts
 # custom
 feed.json*
 recommends.json*
-
+post.json*
