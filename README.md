@@ -19,3 +19,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 Now you are presented with a login screen. Enter your credentials. Then you will see something like this:
 
 ![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
+
+### Credits
+
+Uses NextJS and threads.js at the core
