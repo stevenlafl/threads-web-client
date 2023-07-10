@@ -12,13 +12,15 @@ import en from 'javascript-time-ago/locale/en.json'
 
 TimeAgo.addDefaultLocale(en)
 
-type FeedState = {
-  item: any;
-  loaded: boolean;
-}
-
 export default function PostItem(props: any) {
+  const token = props.token;
   const item = props.item;
+
+  const hasChildren = props.hasChildren;
+  const hasParent = props.hasParent;
+  const levels = props.levels;
+
+  console.log(hasChildren, hasParent, levels)
 
   console.log(item);
   let post = item.posts[0];
@@ -42,20 +44,38 @@ export default function PostItem(props: any) {
   // convert unix timestamp to readable time
   const date = new Date(post.taken_at * 1000);
 
+  async function likePost(e: any) {
+    const response = await fetch('/api/like', {
+      method: 'POST',
+      body: JSON.stringify({
+        token: token,
+        post_id: id,
+      }),
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).then((res) => res.json());
+  }
+
   return (
     <>
-    <div className="flex flex-shrink-0 p-4 pb-0">
+    <div className={"flex flex-shrink-0 pb-0 " + ((hasParent) ? "px-8 py-4" : "p-4")}>
       <div className="flex-shrink-0 group block">
         {(isRepost) && 
           <div className="text-sm text-gray-500 pb-2">
             {repostUser.username} reposted
           </div>
         }
+        {(hasParent) && 
+          <div className="text-sm text-gray-500 pb-2">
+            {user.username} replied
+          </div>
+        }
         <div className="flex items-center">
           <div>
             <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
           </div>
-          <div className="ml-3">
+          <div className="ml-2">
             <p className="text-base leading-6 font-medium text-white">
               {user.full_name}
               <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
@@ -66,7 +86,7 @@ export default function PostItem(props: any) {
         </div>
       </div>
   </div>
-  <div className="pl-16 pr-16">
+  <div className={(hasParent) ? "px-20" : "px-16"}>
     <Link href={"/post/" + id} target="_blank">
       <p className="text-base width-auto font-medium text-white flex-shrink">
         {(post.caption) &&
@@ -143,7 +163,11 @@ export default function PostItem(props: any) {
       
     </div>
     {/* <textarea defaultValue={JSON.stringify(post, null, 2)}></textarea> */}
-    <hr className="border-gray-600"></hr>
+    {hasChildren ?
+      <hr className="border-gray-800"></hr>
+      :
+      <hr className="border-gray-600"></hr>
+    }
     </>
   )
 

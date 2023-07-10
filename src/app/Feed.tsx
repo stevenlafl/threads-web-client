@@ -80,7 +80,7 @@ export default function Feed(props: any) {
 
         if (item.posts.length > 0 && !exists) {
           newItems.push(
-            <FeedItem key={item.id} item={item}/>
+            <FeedItem key={item.id} token={token} item={item}/>
           )
         }
       }
@@ -94,7 +94,7 @@ export default function Feed(props: any) {
   };
 
   const addPost = (item: any) => {
-    const newPost = <FeedItem key={item.id} item={{posts: [item]}}/>
+    const newPost = <FeedItem key={item.id} token={token} item={{posts: [item]}}/>
     setItems(prevItems => [newPost, ...prevItems])
   }
 
