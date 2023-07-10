@@ -10,7 +10,9 @@ docker run -it -p 3000:3000 stevenlafl/threads-web-client:latest
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Now you are presented with a login screen. Enter your credentials. Then you will see something like this:
+Now you are presented with a login screen. This login screen **only exchanges a username/password combination for a token** and stores it on your browser as a cookie. Subsequent requests use that cookie's token value to do everything. This has no backend storage, so any browser session will work perfectly fine. I run the one instance and have multiple people accessing it for their feeds.
+
+Enter your credentials. Then you will see something like this:
 
 ![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
 
