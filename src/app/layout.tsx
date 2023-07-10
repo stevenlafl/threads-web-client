@@ -3,6 +3,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { cookies } from 'next/headers'
 import PostForm from './PostForm'
+import Link from 'next/link'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -20,6 +21,8 @@ export default function RootLayout({
   const cookieStore = cookies();
   const tokenCookie = cookieStore.get('token');
   const usernameCookie = cookieStore.get('username');
+  
+  const profileURL = `https://threads.net/@${usernameCookie.value}`;
 
   if (tokenCookie) {
     return (
@@ -27,7 +30,7 @@ export default function RootLayout({
         <body className={inter.className + ' flex items-center justify-center bg-gray-900'}>
           <div>
             <div className="flex">
-              <div className="w-2/5 text-white h-12 pl-32 py-4 h-auto">
+              <div className="w-2/5 text-white pl-32 py-4 h-auto">
                 {/* <!--left menu--> */}
                 <svg viewBox="0 0 192 192" className="h-12 w-12 text-white" fill="currentColor">
                     <g>
@@ -74,7 +77,7 @@ export default function RootLayout({
                                 
                             </p>
                             <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                @{usernameCookie!.value}
+                            <Link href={profileURL} target='_blank'>@{usernameCookie.value}</Link>
                             </p>
                           </div>
                       </div>
