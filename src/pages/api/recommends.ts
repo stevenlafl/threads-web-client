@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from '@threadsjs/threads.js';
 
 import * as fs from 'fs';
 

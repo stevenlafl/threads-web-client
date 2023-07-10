@@ -12,6 +12,7 @@ export default function Feed(props: any) {
   const token = props.token;
   const post_id = props.post_id;
 
+  const [thread, setThread] = useState(<></> as JSX.Element);
   const [items, setItems] = useState([] as JSX.Element[]);
   const [nextMaxId, setNextMaxId] = useState(null as string | null);
   const [isLoading, setIsLoading] = useState(false);
@@ -41,6 +42,12 @@ export default function Feed(props: any) {
           }
         })
         data = await response.json();
+
+        data.items = data.reply_threads;
+
+        setThread(
+          <FeedItem key={data.containing_thread.id} item={data.containing_thread}/>
+        )
       }
       else {
         const response = await fetch('/api/feed', {
@@ -94,8 +101,13 @@ export default function Feed(props: any) {
 
   return (
     <>
+      {(post_id) && 
+        <div>
+          {thread}
+        </div>
+      }
       <div>
-        <PostForm token={token} addPost={addPost} />
+        <PostForm token={token} addPost={addPost} post_id={post_id} />
         <hr className="border-gray-800 border-4" />
       </div>
       <div>

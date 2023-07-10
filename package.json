@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@threadsjs/threads.js": "^1.5.4",
+    "@threadsjs/threads.js": "^1.6.3",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
     "@types/react-dom": "18.2.6",

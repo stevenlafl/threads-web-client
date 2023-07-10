@@ -27,16 +27,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
   }
 
-  if (!payload['error']) {
-    payload = {
-      ...payload,
-      next_max_id: payload.paging_tokens.downward,
-      items: [
-        ...[(payload.containing_thread)],
-        ...(payload.reply_threads),
-      ]
-    }
-  }
-
   return res.status(200).json(payload);
 }

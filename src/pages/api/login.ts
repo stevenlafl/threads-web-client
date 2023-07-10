@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { getToken } from '@threadsjs/threads.js';
+import { Client } from '@threadsjs/threads.js';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { username, password } = req.body;
@@ -7,7 +7,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   let payload: any = {};
 
   try {
-    payload['token'] = await getToken(username, password);
+    let client = new Client({});
+    await client.login(username, password);
+    payload['token'] = client.token;
   } catch (e: any) {
     payload['error'] = e.message;
   }
