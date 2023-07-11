@@ -138,6 +138,7 @@ export default function RootLayout({
                       </div>
                     </Link>
                 </div>
+                <LogoutButton />
               </div>
               <div className="w-3/5 border border-[#343638] h-auto  border-t-0">
                 <hr className="border-bg-[#343638]" />
@@ -145,7 +146,6 @@ export default function RootLayout({
               </div>
               <div className="w-2/5 h-12 ml-10">
                 {/* <!--right menu--> */}
-                <LogoutButton />
                 <div className="clear-both relative text-gray-300 w-80 p-5 pb-0 mr-16">
                   <button type="submit" className="absolute ml-4 mt-3 mr-4">
                     <svg

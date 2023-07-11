@@ -18,8 +18,8 @@ export default function LogoutButton() {
   }
 
   return (
-    <div className="text-gray-300 w-80 p-5 pb-0 mr-16">
-      <button type="submit" className="bg-[#343638] hover:bg-gray-600 text-white font-bold py-2 px-8 rounded-full float-right" onClick={handleSubmit}>
+    <div className="text-gray-300 ml-7">
+      <button type="submit" className="bg-[#343638] hover:bg-gray-600 text-white font-bold pb-1 px-4 rounded-full" onClick={handleSubmit}>
         Log out
       </button>
     </div>
