@@ -10,6 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     let client = new Client({});
     await client.login(username, password);
     payload['token'] = client.token;
+    payload['userId'] = client.userId;
   } catch (e: any) {
     payload['error'] = e.message;
   }

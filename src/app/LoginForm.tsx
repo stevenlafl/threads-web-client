@@ -27,7 +27,10 @@ export default function LoginForm() {
       setCookie('token', response.token, {
         maxAge: 60*60*24*365
       });
-      setCookie('username', e.target.username.value,{
+      setCookie('username', e.target.username.value, {
+        maxAge: 60*60*24*365
+      });
+      setCookie('user_id', response.userId, {
         maxAge: 60*60*24*365
       });
       router.refresh();
