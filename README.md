@@ -1,5 +1,12 @@
 # Instagram Threads Web Client
 
+<div align="center">
+  
+[![Docker Pulls](https://badgen.net/docker/pulls/stevenlafl/threads-web-client?icon=docker&label=pulls)](https://hub.docker.com/r/stevenlafl/threads-web-client/)
+[![Average time to resolve an issue](http://isitmaintained.com/badge/resolution/stevenlafl/threads-web-client.svg)](http://isitmaintained.com/project/stevenlafl/threads-web-client "Average time to resolve an issue")
+
+</div>
+
 This project provides a desktop web client for Threads. Meta is too slow to implement, so I'm working on it. Mobile is not the best experience to work with.
 
 ## Running
