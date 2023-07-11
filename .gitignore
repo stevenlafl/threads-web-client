@@ -41,3 +41,6 @@ post.json*
 post_fetch.json*
 reply.json*
 like.json*
+repost.json*
+unlike.json*
+quote.json*
