@@ -6,8 +6,17 @@ import Image from 'next/image'
 export default function UserItem(props: any) {
   const token = props.token;
   const user = props.user;
+  const my_user_id = props.my_user_id;
 
   console.log(user);
+
+  const [isFollowing, setIsFollowing] = useState(false);
+
+  async function followUser(e: any) {
+    e.preventDefault();
+
+
+  }
 
   return (
     <>
@@ -25,18 +34,25 @@ export default function UserItem(props: any) {
                       </div>
                   </div>
                   {/* <!-- Follow Button --> */}
-                  <div className="flex flex-col text-right mt-20">
-                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto">
-                          Follow
-                      </button>
-                  </div>
+                  {user.pk != my_user_id &&
+                    <div className="flex flex-col text-right mt-20">
+                        <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={followUser}>
+                            Follow
+                        </button>
+                    </div>
+                  }
               </div>
       
               {/* <!-- Profile info --> */}
               <div className="space-y-1 justify-center w-full mt-3 ml-3">
                   {/* <!-- User basic--> */}
                   <div>
-                      <h2 className="text-xl leading-6 font-bold text-white">{user.full_name}</h2>
+                      <h2 className="text-xl leading-6 font-bold text-white">
+                        {user.full_name}
+                        { user.is_verified && 
+                          <svg className="inline-block -mt-0.5 ml-2" aria-label="Verified" color="rgb(0, 149, 246)" fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg>
+                        }
+                      </h2>
                       <p className="text-sm leading-5 font-medium text-gray-500">@{user.username}</p>
                   </div>
                   {/* <!-- Description and others --> */}
@@ -59,6 +75,7 @@ export default function UserItem(props: any) {
                             </a>
                           </span>
                         }
+                        {user.profile_context && 
                           <span className="flex mr-2 text-white">
                             <svg viewBox="0 0 24 24" fill="currentColor" className="h-5 w-5 paint-icon">
                               <g>
@@ -70,6 +87,7 @@ export default function UserItem(props: any) {
                               </g>
                             </svg>
                           <span className="leading-5 ml-1">{user.profile_context}</span></span>
+                        }
                       </div>
                   </div>
                   <div className="pt-3 flex justify-start items-start w-full divide-x divide-gray-800 divide-solid">

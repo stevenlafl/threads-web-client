@@ -6,6 +6,7 @@ import UserItem from './UserItem';
 export default function User(props: any) {
   const token = props.token;
   const user_id = props.user_id;
+  const my_user_id = props.my_user_id;
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -40,6 +41,6 @@ export default function User(props: any) {
     }
   }, []);
   return (
-    <UserItem token={token} user={user} />
+    <UserItem token={token} user={user} my_user_id={my_user_id} />
   )
 }

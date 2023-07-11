@@ -9,6 +9,8 @@ export default function Page({ params }: { params: { slug: string } }) {
   const cookieStore = cookies();
   const tokenCookie = cookieStore.get('token');
   const token = tokenCookie?.value;
+  const userIdCookie = cookieStore.get('user_id');
+  const my_user_id = userIdCookie?.value;
 
   const user_id = params.slug;
 
@@ -39,7 +41,7 @@ export default function Page({ params }: { params: { slug: string } }) {
           </a>
         </div>
       </div>
-      <User token={token} user_id={user_id} />
+      <User token={token} user_id={user_id} my_user_id={my_user_id} />
     </>
   )
 }

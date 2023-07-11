@@ -20,9 +20,10 @@ export default function RootLayout({
   const cookieStore = cookies();
   const tokenCookie = cookieStore.get("token");
   const usernameCookie = cookieStore.get("username");
+  const userIdCookie = cookieStore.get("user_id");
 
   if (tokenCookie) {
-    const profileURL = `https://threads.net/@${usernameCookie!.value}`;
+    const profileURL = `/user/${userIdCookie!.value}`;
 
     return (
       <html lang="en">
