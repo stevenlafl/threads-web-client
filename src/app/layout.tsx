@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 import PostForm from "./PostForm";
 import Link from "next/link";
+import LogoutButton from "./LogoutButton";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -85,10 +86,7 @@ export default function RootLayout({
                     </svg>
                     Notifications
                   </a>
-                  <a
-                    href="#"
-                    className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300"
-                  >
+                  <Link href={profileURL} target="_blank" className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300">
                     <svg
                       className="mr-4 h-6 w-6"
                       fill="none"
@@ -101,7 +99,7 @@ export default function RootLayout({
                       <path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
                     </svg>
                     Profile
-                  </a>
+                  </Link>
                   <a
                     href="#"
                     className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300"
@@ -147,7 +145,8 @@ export default function RootLayout({
               </div>
               <div className="w-2/5 h-12 ml-10">
                 {/* <!--right menu--> */}
-                <div className="relative text-gray-300 w-80 p-5 pb-0 mr-16">
+                <LogoutButton />
+                <div className="clear-both relative text-gray-300 w-80 p-5 pb-0 mr-16">
                   <button type="submit" className="absolute ml-4 mt-3 mr-4">
                     <svg
                       className="h-4 w-4 fill-current"
