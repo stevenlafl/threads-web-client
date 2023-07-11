@@ -8,7 +8,7 @@ import Link from "next/link";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Threads - Web Client",
+  title: "Threads, an Instagram app Web Client",
   description: "A Next.JS desktop web client for Meta's Instagram Threads",
 };
 
