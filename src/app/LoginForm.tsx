@@ -24,8 +24,12 @@ export default function LoginForm() {
     }).then((res) => res.json());
 
     if (response.token) {
-      setCookie('token', response.token);
-      setCookie('username', e.target.username.value);
+      setCookie('token', response.token, {
+        maxAge: 60*60*24*365
+      });
+      setCookie('username', e.target.username.value,{
+        maxAge: 60*60*24*365
+      });
       router.refresh();
     }
   }
