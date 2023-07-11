@@ -134,19 +134,21 @@ export default function PostItem(props: any) {
             {user.username} quoted
           </div>
         }
-        <div className="flex items-center">
-          <div>
-            <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
+        <Link href={"/user/" + user.pk} target="_blank">
+          <div className="flex items-center">
+            <div>
+              <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
+            </div>
+            <div className="ml-2">
+              <p className="text-base leading-6 font-medium text-white">
+                {user.full_name}
+                <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
+                  @{user.username} - <ReactTimeAgo date={date} locale="en-US" />
+                </span>
+              </p>
+            </div>
           </div>
-          <div className="ml-2">
-            <p className="text-base leading-6 font-medium text-white">
-              {user.full_name}
-              <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
-                @{user.username} - <ReactTimeAgo date={date} locale="en-US" />
-              </span>
-            </p>
-          </div>
-        </div>
+        </Link>
       </div>
   </div>
   <div className={(hasParent) ? "px-20" : "px-16"}>
@@ -249,28 +251,5 @@ export default function PostItem(props: any) {
       <hr className="border-gray-600"></hr>
     }
     </>
-  )
-
-  return (
-    <div className="max-w-lg rounded overflow-hidden shadow-lg mb-10">
-      <div className="px-6 py-4">
-        {(isRepost) && 
-          <div className="text-sm text-gray-500">
-            {repostUser.username} reposted
-          </div>
-        }
-        <div className="font-bold text-xl mb-2">
-          {user.username}
-        </div>
-        <p className="text-gray-700 text-base">
-          {(post.caption) &&
-            post.caption.text
-          }
-        </p>
-      </div>
-      {(images.length > 0 && !images[0].url.includes('null.jpg')) &&
-        <Image className="mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
-      }
-    </div>
   )
 }

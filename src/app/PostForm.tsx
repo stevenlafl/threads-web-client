@@ -93,7 +93,11 @@ export default function LoginForm(props: any) {
 
           <div className="flex-1">
             <button className="bg-[#343638] mt-5 hover:bg-gray-600  text-white font-bold py-2 px-8 rounded-full mr-8 float-right">
-              Post
+              {post_id ?
+                'Reply'
+                :
+                'Post'
+              }
             </button>
           </div>
       </div>

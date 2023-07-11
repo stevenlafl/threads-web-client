@@ -9,12 +9,9 @@ export default async function Home() {
 
   if (tokenCookie) {
     const token = tokenCookie.value as string;
-
     return <Feed token={token} post_id={null} />;
   }
-
-  async function handleSubmit(e: any) {}
-
+  
   return (
     <div className="relative flex gap-32 items-center justify-center min-h-screen overflow-hidden bg-black">
       <div className="w-full p-6 bg-white rounded-md shadow-md lg:max-w-xl">
