@@ -109,7 +109,7 @@ export default function PostItem(props: any) {
         }
       }).then((res) => res.json());
 
-      if (response.token.status === 'ok') {
+      if (response.status === 'ok') {
         setHasReposted(false);
       }
     }
@@ -125,7 +125,7 @@ export default function PostItem(props: any) {
         }
       }).then((res) => res.json());
 
-      if (response.token.status === 'ok') {
+      if (response.status === 'ok') {
         setHasReposted(true);
       }
     }

@@ -117,6 +117,13 @@ export default function Feed(props: any) {
   const addPost = (item: any) => {
     const newPost = <FeedItem key={item.id} token={token} item={{posts: [item]}}/>
     setItems(prevItems => [newPost, ...prevItems])
+    let newFeed = JSON.parse(JSON.stringify(prevFeed));
+    newFeed.items = [{
+      threaded_items: [item],
+      posts: [item]
+    },
+    ...prevFeed.items];
+    dispatch(setFeed(newFeed));
   }
 
   const handleRefreshBtn = async (e: any) => {

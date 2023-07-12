@@ -14,7 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   else {
     try {
       const client = new Client({ token });
-      payload['token'] = await client.posts.create("1", {contents: text})
+      // @ts-ignore
+      payload = await client.posts.create("1", {contents: text})
     } catch (e: any) {
       payload['error'] = e.message;
     }

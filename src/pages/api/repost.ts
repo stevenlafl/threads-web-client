@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   else {
     try {
       const client = new Client({ token });
-      payload['token'] = await client.rest.request(`/api/v1/repost/create_repost/`, {
+      payload = await client.rest.request(`/api/v1/repost/create_repost/`, {
         method: 'POST',
         body: 'media_id=' + post_id
       });

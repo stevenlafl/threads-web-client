@@ -2,7 +2,6 @@
 
 import { useState } from 'react';
 
-
 export default function LoginForm(props: any) {
 
   const [text, setText] = useState("");
@@ -45,7 +44,7 @@ export default function LoginForm(props: any) {
       }).then((res) => res.json());
     }
 
-    addPost(response.token.media);
+    addPost(response.media);
     setText("")
   }
 
