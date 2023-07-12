@@ -21,7 +21,8 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
-  }
+  },
+  output: 'standalone'
 }
 
 module.exports = nextConfig

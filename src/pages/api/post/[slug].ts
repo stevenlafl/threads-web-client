@@ -8,8 +8,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { token } = req.body;
   const post_id = req.query.slug as string;
 
-  console.log(token);
-  console.log(post_id);
+  // console.log(token);
+  // console.log(post_id);
 
   let payload: any = {};
 

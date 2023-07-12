@@ -8,7 +8,7 @@ export default function UserItem(props: any) {
   const user = props.user;
   const my_user_id = props.my_user_id;
 
-  console.log(user);
+  //console.log(user);
 
   const [isFollowing, setIsFollowing] = useState(false);
 
