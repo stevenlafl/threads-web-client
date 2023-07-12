@@ -8,19 +8,14 @@ import { Metadata } from 'next';
 import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import { useSelector } from 'react-redux';
-import { selectAuthState } from '@/store/authSlice';
+import { selectAuthState, selectToken } from '@/store/authSlice';
 
 export default function Page({ params }: { params: { slug: string } }) {
 
-  const [token, setToken] = useState('');
+  const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
 
   const user_id = params.slug;
-
-  useEffect(() => {
-    const tokenCookie = getCookie("token");
-    setToken(tokenCookie as string);
-  });
 
   const post_id = params.slug;
 

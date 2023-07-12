@@ -6,24 +6,19 @@ import Feed from "@/app/Feed";
 import { Metadata } from "next";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import { selectAuthState } from "@/store/authSlice";
+import { selectAuthState, selectToken } from "@/store/authSlice";
 import { getCookie } from "cookies-next";
 
 export default function Home() {
-  const [token, setToken] = useState('');
+  const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
-
-  useEffect(() => {
-    const tokenCookie = getCookie("token");
-    setToken(tokenCookie as string);
-  });
 
   if (loggedIn && token) {
     return <Feed token={token} post_id={null} />;
   }
   
   return (
-    <div className="relative flex gap-32 items-center justify-center min-h-screen overflow-hidden bg-black">
+    <div className="relative width-full flex gap-32 items-center justify-center min-h-screen overflow-hidden bg-[#101010]">
       <div className="w-full p-6 bg-white rounded-md shadow-md lg:max-w-xl">
         <div className="flex justify-center mb-5">
           <svg

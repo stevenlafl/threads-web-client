@@ -6,6 +6,7 @@ import { AppStore } from "./appStore";
 // Type for our state
 export interface AuthState {
   authState: boolean;
+  token: string | null;
   userId: string | null;
   userName: string | null;
 }
@@ -13,6 +14,7 @@ export interface AuthState {
 // Initial state
 const initialState: AuthState = {
   authState: false,
+  token: null,
   userId: null,
   userName: null,
 };
@@ -25,6 +27,9 @@ export const authSlice = createSlice({
     // Action to set the authentication status
     setAuthState(state, action) {
       state.authState = action.payload;
+    },
+    setToken(state, action) {
+      state.token = action.payload;
     },
     setUserId(state, action) {
       state.userId = action.payload;
@@ -47,11 +52,13 @@ export const authSlice = createSlice({
 
 export const {
   setAuthState,
+  setToken,
   setUserId,
   setUserName,
 } = authSlice.actions;
 
 export const selectAuthState = (state: AppStore) => state.auth.authState;
+export const selectToken = (state: AppStore) => state.auth.token;
 export const selectUserId = (state: AppStore) => state.auth.userId;
 export const selectUserName = (state: AppStore) => state.auth.userName;
 

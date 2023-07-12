@@ -6,21 +6,16 @@ import LoginForm from '@/app/LoginForm';
 import User from './User';
 import { useEffect, useState } from 'react';
 import { Metadata } from 'next';
-import { selectAuthState, selectUserId } from '@/store/authSlice';
+import { selectAuthState, selectToken, selectUserId } from '@/store/authSlice';
 import { useSelector } from 'react-redux';
 
 export default function Page({ params }: { params: { slug: string } }) {
 
-  const [token, setToken] = useState('');
+  const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
   const my_user_id = useSelector(selectUserId);
 
   const user_id = params.slug;
-
-  useEffect(() => {
-    const tokenCookie = getCookie("token");
-    setToken(tokenCookie as string);
-  });
 
   if (loggedIn && token) {
     return (

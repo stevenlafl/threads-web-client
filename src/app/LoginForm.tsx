@@ -1,6 +1,6 @@
 "use client";
 
-import { setAuthState, setUserName, setUserId } from '@/store/authSlice';
+import { setAuthState, setUserName, setUserId, setToken } from '@/store/authSlice';
 import { setCookie } from 'cookies-next';
 import Image from 'next/image'
 import Link from 'next/link';
@@ -27,10 +27,7 @@ export default function LoginForm() {
     }).then((res) => res.json());
 
     if (response.token) {
-      setCookie('token', response.token, {
-        maxAge: 60*60*24*365
-      });
-
+      dispatch(setToken(response.token));
       dispatch(setAuthState(true));
       dispatch(setUserName(e.target.username.value));
       dispatch(setUserId(response.userId));
@@ -39,7 +36,7 @@ export default function LoginForm() {
   }
 
   return (
-      <form className="mt-6" onSubmit={handleSubmit}>
+    <form className="mt-6" onSubmit={handleSubmit}>
       <div className="mb-4">
         <label
           htmlFor="email"

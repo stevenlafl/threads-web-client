@@ -15,7 +15,7 @@ TimeAgo.addDefaultLocale(en)
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAuthState, selectUserId, selectUserName, setAuthState } from "../store/authSlice";
+import { selectAuthState, selectToken, selectUserId, selectUserName, setAuthState } from "../store/authSlice";
 
 export default function AppWrapper({
   children,
@@ -23,16 +23,10 @@ export default function AppWrapper({
   children: React.ReactNode;
 }) {
 
-  const [token, setToken] = useState('');
-
+  const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
   const userId = useSelector(selectUserId);
   const userName = useSelector(selectUserName);
-
-  useEffect(() => {
-    const tokenCookie = getCookie("token");
-    setToken(tokenCookie as string);
-  });
 
   if (loggedIn) {
     const profileURL = `/user/${userId}`;
