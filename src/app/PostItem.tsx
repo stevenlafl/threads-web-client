@@ -117,87 +117,83 @@ export default function PostItem(props: any) {
 
   return (
     <>
-    <div className={"flex flex-shrink-0 pb-0 " + ((hasParent) ? "px-8 py-4" : "p-4")}>
-      <div className="flex-shrink-0 group block">
-        {(isRepost) && 
-          <div className="text-sm text-gray-500 pb-2">
-            {repostUser.username} reposted
-          </div>
-        }
-        {(hasParent) && 
-          <div className="text-sm text-gray-500 pb-2">
-            {user.username} replied
-          </div>
-        }
+      <div className={"flex flex-shrink-0 pb-0 " + ((hasParent) ? "px-8 py-4" : "p-4")}>
+        <div className="flex-shrink-0 group block">
+          {(isRepost) && 
+            <div className="text-sm text-gray-500 pb-2">
+              {repostUser.username} reposted
+            </div>
+          }
+          {(hasParent) && 
+            <div className="text-sm text-gray-500 pb-2">
+              {user.username} replied
+            </div>
+          }
+          {(hasQuoted) && 
+            <div className="text-sm text-gray-500 pb-2">
+              {user.username} quoted
+            </div>
+          }
+          <Link href={"/user/" + (user.pk ? user.pk : '')}>
+            <div className="flex items-center">
+              <div>
+                <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
+              </div>
+              <div className="ml-2">
+                <p className="text-base leading-6 font-medium text-white">
+                  {user.full_name}
+                  {user.is_verified && 
+                    <svg className="inline-block -mt-0.5 ml-2" aria-label="Verified" color="rgb(0, 149, 246)" fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd"></path></svg>
+                  }
+                  <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
+                    @{user.username} - <ReactTimeAgo date={date} locale="en-US" />
+                  </span>
+                </p>
+              </div>
+            </div>
+          </Link>
+        </div>
+    </div>
+    <div className={(hasParent) ? "px-20" : "px-16"}>
+        <p className="text-base width-auto font-medium text-white flex-shrink whitespace-pre-line">
+          <Link href={"/post/" + id}>
+            {(post.caption) &&
+              post.caption.text
+            }
+            {((videos === null || videos.length === 0 )&& images.length > 0 && !images[0].url.includes('null.jpg')) &&
+              <Image className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
+            }
+            {(videos !== null && videos.length > 0) &&
+              <video className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" controls loop>
+                <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
+              </video>
+            }
+          </Link>
+        </p>
         {(hasQuoted) && 
-          <div className="text-sm text-gray-500 pb-2">
-            {user.username} quoted
+          <div className="border-1">
+            <PostItem item={{posts: [post.text_post_app_info.share_info.quoted_post]}} token={token} hasChildren={true} isQuoted={true}/>
           </div>
         }
-        <Link href={"/user/" + user.pk} target="_blank">
-          <div className="flex items-center">
-            <div>
-              <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
-            </div>
-            <div className="ml-2">
-              <p className="text-base leading-6 font-medium text-white">
-                {user.full_name}
-                {user.is_verified && 
-                  <svg className="inline-block -mt-0.5 ml-2" aria-label="Verified" color="rgb(0, 149, 246)" fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fill-rule="evenodd"></path></svg>
-                }
-                <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
-                  @{user.username} - <ReactTimeAgo date={date} locale="en-US" />
-                </span>
-              </p>
-            </div>
-          </div>
-        </Link>
-      </div>
-  </div>
-  <div className={(hasParent) ? "px-20" : "px-16"}>
-    <Link href={"/post/" + id} target="_blank">
-      <p className="text-base width-auto font-medium text-white flex-shrink whitespace-pre-line">
-        {(post.caption) &&
-          post.caption.text
-        }
-        {((videos === null || videos.length === 0 )&& images.length > 0 && !images[0].url.includes('null.jpg')) &&
-          <Link href={images[0].url} target="_blank">
-            <Image className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" src={images[0].url} width={images[0].width} height={images[0].height} alt={''} />
-          </Link>
-        }
-        {(videos !== null && videos.length > 0) &&
-          <video className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" controls loop>
-            <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
-          </video>
-        }
-      </p>
-      {(hasQuoted) && 
-        <div className="border-1">
-          <PostItem item={{posts: [post.text_post_app_info.share_info.quoted_post]}} token={token} hasChildren={true} isQuoted={true}/>
-        </div>
-      }
-    </Link>
       <p className="text-base width-auto font-medium text-white flex-shrink">
-      {(hasAttachment) &&
-        <div>
-          <Link href={attachment.url} target="_blank">
+        {(hasAttachment) &&
+          <Link href={attachment.url} className="block">
             <Image className="mt-4" src={attachment.image_url} width="500" height="100" alt={''} />
-            <div className="text-sm text-gray-500">
+            <span className="text-sm text-gray-500 block">
               {attachment.display_url}
-            </div>
-            <div>
+            </span>
+            <span className="block">
               {attachment.title}
-            </div>
+            </span>
           </Link>
-        </div>
-      }
+        }
       </p>
       <div className="flex">
           <div className="w-full">
             
             <div className="flex items-center">
               <div className="flex-1 text-center gap-2">
-                <Link href={"/post/" + id} target="_blank" className="mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300 gap-1">
+                <Link href={"/post/" + id} className="mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300 gap-1">
                   <svg className="text-center h-6 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
                   { post.text_post_app_info && 
                     <span>

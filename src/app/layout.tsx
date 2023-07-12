@@ -86,7 +86,7 @@ export default function RootLayout({
                     </svg>
                     Notifications
                   </a>
-                  <Link href={profileURL} target="_blank" className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300">
+                  <Link href={profileURL} className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300">
                     <svg
                       className="mr-4 h-6 w-6"
                       fill="none"
@@ -122,7 +122,7 @@ export default function RootLayout({
                   </button>
                 </nav>
                 <div className="flex-shrink-0 flex hover:bg-gray-00 rounded-full p-4 mt-12 mr-2">
-                    <Link href={profileURL} target="_blank" className="flex-shrink-0 group block">
+                    <Link href={profileURL} className="flex-shrink-0 group block">
                       <div className="flex items-center">
                           <div>
                             {/* <img className="inline-block h-10 w-10 rounded-full" src="" alt="" /> */}
