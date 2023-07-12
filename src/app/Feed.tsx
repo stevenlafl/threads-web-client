@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 export default function Feed(props: any) {
   const token = props.token;
   const post_id = props.post_id;
+  const user_id = props.user_id;
   
   const router = useRouter();
 
@@ -18,6 +19,7 @@ export default function Feed(props: any) {
   const [nextMaxId, setNextMaxId] = useState(null as string | null);
   const [isLoading, setIsLoading] = useState(false);
   const [isFirstLoad, setIsFirstLoad] = useState(true);
+  const [refreshClicked, setRefreshClicked] = useState(false);
 
   const dispatch = useDispatch();
   const prevFeed = useSelector(selectFeed);
@@ -40,7 +42,24 @@ export default function Feed(props: any) {
   
     try {
       let data = {} as any;
-      if (post_id) {
+
+      if (user_id) {
+        const response = await fetch('/api/feed/' + user_id, {
+          method: 'POST',
+          body: JSON.stringify({
+            token: token,
+            max_id: nextMaxId
+          }),
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
+        data = await response.json();
+        data.items = data.threads;
+
+        setNextMaxId(data.next_max_id);
+      }
+      else if (post_id) {
         const response = await fetch('/api/post/' + post_id, {
           method: 'POST',
           body: JSON.stringify({
@@ -114,6 +133,7 @@ export default function Feed(props: any) {
       console.log(error);
     } finally {
       setIsLoading(false);
+      setRefreshClicked(false);
     }
   };
 
@@ -133,14 +153,21 @@ export default function Feed(props: any) {
     e.preventDefault();
 
     setItems([]);
-    dispatch(setLastFeed(0));
+    setNextMaxId(null);
+
+    setRefreshClicked(true);
+
+    // Only set last feed for homepage.
+    if (!post_id && !user_id) {
+      dispatch(setLastFeed(0));
+    }
   }
   
   useEffect(() => {
-    if (lastPrevFeed === 0 && items.length === 0) {
+    if (refreshClicked) {
       fetchData();
     }
-  }, [lastPrevFeed])
+  }, [refreshClicked])
 
   useEffect(() => {
     if (isFirstLoad) {

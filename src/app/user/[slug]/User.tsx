@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import UserItem from './UserItem';
+import Feed from '@/app/Feed';
 
 export default function User(props: any) {
   const token = props.token;
@@ -37,6 +38,9 @@ export default function User(props: any) {
     }
   }, []);
   return (
-    <UserItem token={token} user={user} my_user_id={my_user_id} />
+    <>
+      <UserItem token={token} user={user} my_user_id={my_user_id} />
+      <Feed token={token} user_id={user_id} />
+    </>
   )
 }
