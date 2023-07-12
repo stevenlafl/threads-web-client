@@ -6,11 +6,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
-import TimeAgo from 'javascript-time-ago'
 import ReactTimeAgo from 'react-time-ago'
-import en from 'javascript-time-ago/locale/en.json'
-
-TimeAgo.addDefaultLocale(en)
 
 export default function PostItem(props: any) {
   const token = props.token;

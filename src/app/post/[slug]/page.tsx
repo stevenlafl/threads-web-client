@@ -2,6 +2,12 @@ import { cookies } from 'next/headers'
 import Link from 'next/link';
 import LoginForm from '../../LoginForm';
 import Feed from '@/app/Feed';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: "Threads, an Instagram app Web Client",
+  description: "A Next.JS desktop web client for Meta's Instagram Threads",
+};
 
 export default function Page({ params }: { params: { slug: string } }) {
 
@@ -37,10 +43,6 @@ export default function Page({ params }: { params: { slug: string } }) {
         <Feed token={token} post_id={post_id}/>
       </>
     )
-  }
-
-  async function handleSubmit(e: any) {
-
   }
 
   return (
