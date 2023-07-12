@@ -28,7 +28,7 @@ export default function AppWrapper({
   const userId = useSelector(selectUserId);
   const userName = useSelector(selectUserName);
 
-  if (loggedIn) {
+  if (loggedIn && token) {
     const profileURL = `/user/${userId}`;
 
     return (

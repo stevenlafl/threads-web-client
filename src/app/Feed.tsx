@@ -191,7 +191,9 @@ export default function Feed(props: any) {
         </div>
       }
       <div>
-        <PostForm token={token} addPost={addPost} post_id={post_id} />
+        {!user_id && 
+          <PostForm token={token} addPost={addPost} post_id={post_id} />
+        }
         <hr className="border-b-gray-800" />
       </div>
       {(!post_id) &&

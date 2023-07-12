@@ -14,7 +14,18 @@ export default function Home() {
   const loggedIn = useSelector(selectAuthState);
 
   if (loggedIn && token) {
-    return <Feed token={token} post_id={null} />;
+    return (
+      <>
+        <div className="flex">
+          <div className="flex-1 m-2">
+            <h2 className="px-4 py-2 text-xl font-semibold text-white">
+              Home
+            </h2>
+          </div>
+        </div>
+        <Feed token={token} />
+      </>
+    );
   }
   
   return (
