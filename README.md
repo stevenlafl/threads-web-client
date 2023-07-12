@@ -19,9 +19,23 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Now you are presented with a login screen. This login screen **only exchanges a username/password combination for a token** and stores it on your browser as a cookie. Subsequent requests use that cookie's token value to do everything. This has no backend storage, so any browser session will work perfectly fine. I run the one instance and have multiple people accessing it for their feeds.
 
-Enter your credentials. Then you will see something like this:
+You'll be presented a page like this:
 
-![screenshot](https://user-images.githubusercontent.com/2539092/252205654-8ed5948f-c3e1-4eae-a8a7-8f301c0cc6a6.png)
+<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/864eaa01-f722-49fd-8d0d-bdfcbfddac16" width="500"/>
+
+
+Enter your credentials. Then you will have access to the client. Here are some screenshots (click to view larger version):
+
+<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/38c9e8a6-9070-4377-a8f9-23cecd92ab56" width="500" />
+
+<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/6584558d-ab7f-45a7-be2c-ae44f3ab9537" width="500" />
+
+<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/02929168-dca2-4d38-903f-9a41cd94dc86" width="500" />
+
+<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/9e1dc7aa-0a55-495b-a0a6-e3f2e526b492" width="500" />
+
+
+
 
 ## Contributing
 
