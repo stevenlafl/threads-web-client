@@ -21,8 +21,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const client = new Client({ token });
 
-      payload = await client.rest.request(`/api/v1/text_feed/${post_id}/replies/` + (max_id ? `?paging_token=${encodeURIComponent(max_id)}` : ""), {});
-
+      payload = await client.posts.fetch(post_id, max_id);
     } catch (e: any) {
       payload['error'] = e.message;
     }

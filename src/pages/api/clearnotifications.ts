@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-
+import { Client } from '@threadsjs/threads.js';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -7,16 +7,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   let payload: any = {};
 
-  if (fs.existsSync('./feed.json')) {
-    console.log('sent test recommends');
-    payload = JSON.parse(fs.readFileSync('./recommends.json', 'utf8'));
+  if (fs.existsSync('./clearnotifications.json')) {
+    console.log('sent test notifications');
+    payload = JSON.parse(fs.readFileSync('./clearnotifications.json', 'utf8'));
   }
   else {
     try {
-      const { Client } = require('@threadsjs/threads.js');
       const client = new Client({ token });
-
-      payload = await client.feeds.fetch();
+      payload = await client.feeds.notificationseen();
     } catch (e: any) {
       payload['error'] = e.message;
     }

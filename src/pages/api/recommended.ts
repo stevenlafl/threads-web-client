@@ -3,18 +3,19 @@ import { Client } from '@threadsjs/threads.js';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, text } = req.body;
-  
+  const { token } = req.body;
+
   let payload: any = {};
 
-  if (fs.existsSync('./post.json')) {
-    console.log('sent test post');
-    payload = JSON.parse(fs.readFileSync('./post.json', 'utf8'));
+  if (fs.existsSync('./recommended.json')) {
+    console.log('sent test recommends');
+    payload = JSON.parse(fs.readFileSync('./recommended.json', 'utf8'));
   }
   else {
     try {
       const client = new Client({ token });
-      payload = await client.posts.create("1", {contents: text})
+
+      payload = await client.feeds.recommended();
     } catch (e: any) {
       payload['error'] = e.message;
     }

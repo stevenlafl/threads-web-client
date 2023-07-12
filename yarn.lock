@@ -219,10 +219,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@threadsjs/threads.js@^1.7.1":
-  version "1.7.1"
-  resolved "https://registry.yarnpkg.com/@threadsjs/threads.js/-/threads.js-1.7.1.tgz#c70af8013ef40197db95ec2f59870603e922ec26"
-  integrity sha512-qxAEteVPwMTD6IJKtByVPyaW6sBGqdHMB0Up07tJNs8Mzx+l5pa1KXM1FwAc0ieRzCYQqkP2i8BbhZYTFfBqxg==
+"@threadsjs/threads.js@^1.7.3":
+  version "1.7.3"
+  resolved "https://registry.yarnpkg.com/@threadsjs/threads.js/-/threads.js-1.7.3.tgz#3537a99b13a5e6c524fc9660b14d8b1362d12ec8"
+  integrity sha512-85/HOmSPLOIkHFU/7uEPngZkSJwB6eQO6I2X96MZrHbh2t4N1xuMVqSCXlRBworCm+vVJnuEXZa44sGBVrk/CQ==
   dependencies:
     "@types/node" "^20.4.1"
     undici "^5.22.1"

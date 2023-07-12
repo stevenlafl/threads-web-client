@@ -14,30 +14,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   else {
     try {
       const client = new Client({ token });
-
-      let text_post_app_info = JSON.stringify({"quoted_post_id": post_id, "reply_control": 0});
-
-      const requestBody = {
-        publish_mode: "text_post",
-        text_post_app_info,
-        timezone_offset: "-25200",
-        source_type: "4",
-        _uid: "1",
-        device_id: `android-${client.androidId}`,
-        caption: text,
-        upload_id: new Date().getTime(),
-        device: {
-          manufacturer: "OnePlus",
-          model: "ONEPLUS+A3010",
-          android_version: 25,
-          android_release: "7.1.1",
-        },
-      };
       
-      payload = await client.rest.request(`/api/v1/media/configure_text_only_post/`, {
-        method: 'POST',
-        body: `signed_body=SIGNATURE.${encodeURIComponent(JSON.stringify(requestBody))}`,
-      });
+      payload = await client.posts.quote(post_id, {post: post_id, contents: text});
     } catch (e: any) {
       payload['error'] = e.message;
     }

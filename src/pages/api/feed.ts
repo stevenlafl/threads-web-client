@@ -16,10 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const client = new Client({ token });
 
-      payload = await client.rest.request('/api/v1/feed/text_post_app_timeline/', {
-        method: 'POST',
-        body: 'pagination_source=text_post_feed_threads' + (max_id ? '&max_id=' + max_id : ''),
-      })
+      payload = await client.feeds.fetch(max_id);
     } catch (e: any) {
       payload['error'] = e.message;
     }

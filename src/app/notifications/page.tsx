@@ -1,30 +1,24 @@
 "use client";
 
-import { getCookie } from 'cookies-next'
-import Link from 'next/link';
-import LoginForm from '@/app/LoginForm';
-import User from './User';
-import { useEffect, useState } from 'react';
-import { Metadata } from 'next';
-import { selectAuthState, selectToken, selectUserId } from '@/store/authSlice';
+import Feed from '@/app/Feed';
 import { useSelector } from 'react-redux';
-import SignUp from '@/app/SignUp';
+import { selectAuthState, selectToken } from '@/store/authSlice';
+import SignUp from '../SignUp';
+import NotificationFeed from './NotificationFeed';
 
 export default function Page({ params }: { params: { slug: string } }) {
 
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
-  const my_user_id = useSelector(selectUserId);
-
-  const user_id = params.slug;
 
   if (loggedIn && token) {
+
     return (
       <>
         <div className="flex">
           <div className="flex-1 m-2">
             <h2 className="px-4 py-2 text-xl font-semibold text-white">
-              Profile
+              Notifications
             </h2>
           </div>
           <div className="flex-1 px-4 py-2 m-2">
@@ -40,7 +34,7 @@ export default function Page({ params }: { params: { slug: string } }) {
             </svg>
           </div>
         </div>
-        <User token={token} user_id={user_id} my_user_id={my_user_id} />
+        <NotificationFeed token={token} />
       </>
     )
   }

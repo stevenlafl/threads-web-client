@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { getCookie } from 'cookies-next';
 import { useSelector } from 'react-redux';
 import { selectAuthState, selectToken } from '@/store/authSlice';
+import SignUp from '@/app/SignUp';
 
 export default function Page({ params }: { params: { slug: string } }) {
 
@@ -48,22 +49,6 @@ export default function Page({ params }: { params: { slug: string } }) {
   }
 
   return (
-    <div className="relative flex flex-col items-center justify-center min-h-screen overflow-hidden">
-      <div className="w-full p-6 bg-white rounded-md shadow-md lg:max-w-xl">
-        <h1 className="text-3xl font-bold text-center text-gray-700">
-          Logo
-        </h1>
-        <LoginForm />
-        <p className="mt-4 text-sm text-center text-gray-700">
-          Don&apos;t have an account?
-          <Link
-            href="/signup"
-            className="font-medium text-blue-600 hover:underline"
-          >
-            Sign up
-          </Link>
-        </p>
-      </div>
-    </div>
+    <SignUp />
   )
 }
