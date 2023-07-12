@@ -26,7 +26,7 @@ You'll be presented a page like this:
 
 Enter your credentials. Then you will have access to the client. Here are some screenshots (click to view larger version):
 
-<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/38c9e8a6-9070-4377-a8f9-23cecd92ab56" width="400" />
+<img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/c3d974b8-757c-41b9-82fa-02de50fc35ec" width="400" />
 
 <img src="https://github.com/stevenlafl/threads-web-client/assets/2539092/6584558d-ab7f-45a7-be2c-ae44f3ab9537" width="400" />
 
