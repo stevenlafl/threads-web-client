@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   else {
     try {
       const client = new Client({ token });
-      payload['token'] = await client.posts.reply(text, "1", post_id)
+      payload['token'] = await client.posts.reply("1", {post: post_id, contents: text})
     } catch (e: any) {
       payload['error'] = e.message;
     }
