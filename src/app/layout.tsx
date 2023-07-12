@@ -28,7 +28,7 @@ export default function RootLayout({
       </head>
       <body
         className={
-          inter.className + " flex items-center justify-center bg-[#101010]"
+          inter.className + " flex items-center justify-center bg-[#101010] max-w-screen-xl w-screen m-auto"
         }
       >
       <Provider store={store}>

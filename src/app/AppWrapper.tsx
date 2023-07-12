@@ -36,7 +36,7 @@ export default function AppWrapper({
         <div className="text-white">
         </div>
         <div className="flex">
-          <div className="w-1/5 text-white pl-32 py-4 h-1/3 mr-32">
+          <div className="w-1/5 text-white py-4 h-1/3 mr-10">
             {/* <!--left menu--> */}
             <svg
               viewBox="0 0 192 192"
@@ -145,9 +145,9 @@ export default function AppWrapper({
             <hr className="border-bg-[#343638]" />
             {children}
           </div>
-          <div className="w-2/5 h-12 ml-10">
+          <div className="w-1/5 h-12 ml-10">
             {/* <!--right menu--> */}
-            <div className="clear-both relative text-gray-300 w-80 p-5 pb-0 mr-16">
+            <div className="clear-both relative text-gray-300 mt-4">
               <button type="submit" className="absolute ml-4 mt-3 mr-4">
                 <svg
                   className="h-4 w-4 fill-current"
@@ -174,7 +174,7 @@ export default function AppWrapper({
             </div>
 
             {/* <!--third-people suggetion to follow section--> */}
-            <div className="max-w-sm rounded-lg bg-[#343638] overflow-hidden shadow-lg m-4 mr-20">
+            <div className="rounded-lg bg-[#343638] overflow-hidden shadow-lg mt-4 w-full">
               <div className="flex">
                 <div className="flex-1 m-2">
                   <h2 className="px-4 py-2 text-xl w-48 font-semibold text-white">
