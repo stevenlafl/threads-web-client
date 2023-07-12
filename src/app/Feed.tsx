@@ -24,7 +24,7 @@ export default function Feed(props: any) {
   const lastPrevFeed = useSelector(selectLastFeed);
 
   const handleScroll = () =>  {
-    if (window.innerHeight + document.documentElement.scrollTop !== document.documentElement.offsetHeight || isLoading) {
+    if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight || isLoading) {
       return;
     }
 
@@ -65,7 +65,9 @@ export default function Feed(props: any) {
       }
       else {
         const fetchPrevFeed = ((Date.now()/1000) - lastPrevFeed) > 60*5;
-
+        
+        // Grab a new feed if it'd been long enough.
+        // Always attempt to paginate.
         if (!prevFeed || fetchPrevFeed || nextMaxId) {
           const response = await fetch('/api/feed', {
             method: 'POST',
@@ -79,7 +81,8 @@ export default function Feed(props: any) {
           })
           data = await response.json();
 
-          // Main feed, set into cache.
+          // We're fetching the main /api/feed and not /api/post/xxx, so it's
+          // the main feed. Only cache the first page.
           if (!nextMaxId) {
             dispatch(setFeed(data));
             dispatch(setLastFeed(Date.now()/1000));
