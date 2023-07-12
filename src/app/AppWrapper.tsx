@@ -15,7 +15,7 @@ TimeAgo.addDefaultLocale(en)
 
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAuthState, setAuthState } from "../store/authSlice";
+import { selectAuthState, selectUserId, selectUserName, setAuthState } from "../store/authSlice";
 
 export default function AppWrapper({
   children,
@@ -23,33 +23,23 @@ export default function AppWrapper({
   children: React.ReactNode;
 }) {
 
-  const counter = useSelector(selectAuthState);
-  const dispatch = useDispatch();
-
-  console.log(counter);
-  
   const [token, setToken] = useState('');
-  const [username, setUsername] = useState('');
-  const [userId, setUserId] = useState('');
+
+  const loggedIn = useSelector(selectAuthState);
+  const userId = useSelector(selectUserId);
+  const userName = useSelector(selectUserName);
 
   useEffect(() => {
     const tokenCookie = getCookie("token");
-    const usernameCookie = getCookie("username");
-    const userIdCookie = getCookie("user_id");
-
     setToken(tokenCookie as string);
-    setUsername(usernameCookie as string);
-    setUserId(userIdCookie as string);
   });
 
-  if (token) {
+  if (loggedIn) {
     const profileURL = `/user/${userId}`;
 
     return (
       <div>
         <div className="text-white">
-        Counter: {counter ? 'true' : 'false'}
-        <button onClick={() => dispatch(setAuthState(true))}>Increment</button>
         </div>
         <div className="flex">
           <div className="w-1/5 text-white pl-32 py-4 h-1/3 mr-32">
@@ -149,7 +139,7 @@ export default function AppWrapper({
                             
                         </p>
                         <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                          @{username}
+                          @{userName}
                         </p>
                       </div>
                   </div>

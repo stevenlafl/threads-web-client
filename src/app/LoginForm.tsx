@@ -1,14 +1,17 @@
 "use client";
 
+import { setAuthState, setUserName, setUserId } from '@/store/authSlice';
 import { setCookie } from 'cookies-next';
 import Image from 'next/image'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 
 
 export default function LoginForm() {
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   async function handleSubmit(e: any) {
     e.preventDefault();
@@ -27,12 +30,10 @@ export default function LoginForm() {
       setCookie('token', response.token, {
         maxAge: 60*60*24*365
       });
-      setCookie('username', e.target.username.value, {
-        maxAge: 60*60*24*365
-      });
-      setCookie('user_id', response.userId, {
-        maxAge: 60*60*24*365
-      });
+
+      dispatch(setAuthState(true));
+      dispatch(setUserName(e.target.username.value));
+      dispatch(setUserId(response.userId));
       router.refresh();
     }
   }

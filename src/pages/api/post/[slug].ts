@@ -5,7 +5,7 @@ import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
  
-  const { token } = req.body;
+  const { token, max_id } = req.body;
   const post_id = req.query.slug as string;
 
   // console.log(token);
@@ -21,7 +21,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
       const client = new Client({ token });
 
-      payload = await client.posts.fetch(post_id);
+      console.log(`/api/v1/text_feed/${post_id}/replies/` + (max_id ? `?paging_token=${encodeURIComponent(max_id)}` : ""));
+      payload = await client.rest.request(`/api/v1/text_feed/${post_id}/replies/` + (max_id ? `?paging_token=${encodeURIComponent(max_id)}` : ""), {});
+
     } catch (e: any) {
       payload['error'] = e.message;
     }

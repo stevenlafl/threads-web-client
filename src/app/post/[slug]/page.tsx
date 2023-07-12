@@ -1,23 +1,30 @@
+"use client";
+
 import { cookies } from 'next/headers'
 import Link from 'next/link';
 import LoginForm from '../../LoginForm';
 import Feed from '@/app/Feed';
 import { Metadata } from 'next';
-
-export const metadata: Metadata = {
-  title: "Threads, an Instagram app Web Client",
-  description: "A Next.JS desktop web client for Meta's Instagram Threads",
-};
+import { useEffect, useState } from 'react';
+import { getCookie } from 'cookies-next';
+import { useSelector } from 'react-redux';
+import { selectAuthState } from '@/store/authSlice';
 
 export default function Page({ params }: { params: { slug: string } }) {
 
-  const cookieStore = cookies();
-  const tokenCookie = cookieStore.get('token');
+  const [token, setToken] = useState('');
+  const loggedIn = useSelector(selectAuthState);
+
+  const user_id = params.slug;
+
+  useEffect(() => {
+    const tokenCookie = getCookie("token");
+    setToken(tokenCookie as string);
+  });
 
   const post_id = params.slug;
 
-  if (tokenCookie) {
-    const token = tokenCookie.value as string;
+  if (loggedIn && token) {
 
     return (
       <>

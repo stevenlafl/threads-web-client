@@ -49,6 +49,9 @@ export default function PostItem(props: any) {
 
   // States
   const [liked, setLiked] = useState(post.has_liked);
+  const [hasReposted, setHasReposted] = useState(
+    (post.text_post_app_info && post.text_post_app_info.share_info && post.text_post_app_info.share_info.is_reposted_by_viewer) as boolean
+  );
   const [likeCount, setLikeCount] = useState(post.like_count);
 
   async function likePost(e: any) {
@@ -94,20 +97,37 @@ export default function PostItem(props: any) {
     e.preventDefault();
 
     let response: any = null;
-    response = await fetch('/api/repost', {
-      method: 'POST',
-      body: JSON.stringify({
-        token: token,
-        post_id: id,
-      }),
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    }).then((res) => res.json());
+    if (hasReposted) {
+      response = await fetch('/api/unrepost', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          post_id: id,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
 
-    if (response.status === 'ok') {
-      setLiked(true);
-      setLikeCount(likeCount + 1);
+      if (response.token.status === 'ok') {
+        setHasReposted(false);
+      }
+    }
+    else {
+      response = await fetch('/api/repost', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          post_id: id,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
+
+      if (response.token.status === 'ok') {
+        setHasReposted(true);
+      }
     }
   }
 
@@ -201,17 +221,21 @@ export default function PostItem(props: any) {
 
               <div className="flex-1 text-center py-2 m-2">
                 <a href="#" className="gap-1 w-12 mt-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300" onClick={rePost}>
-                  <svg className="text-center h-7 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path></svg>
+                  {hasReposted ?
+                    <svg className="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                        <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M17 10v4H1l3 3M3 8V4h16l-3-3M9 8l2-1v4"></path>
+                    </svg>
+                  :
+                  <svg className="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 18">
+                    <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 14 3-3m-3 3 3 3m-3-3h16v-3m2-7-3 3m3-3-3-3m3 3H3v3"></path>
+                  </svg>
+                  }
                 </a>
               </div>
 
               <div className="flex-1 text-center py-2 m-2">
                 <a href="#" className="mt-1 gap-1 group flex items-center text-gray-500 px-3 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300" onClick={likePost}>
-                  {(liked) ?
-                    <svg className="text-center h-7 w-6" fill="gray" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                    :
-                    <svg className="text-center h-7 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                  }
+                  <svg className="text-center h-7 w-6" fill={liked ? "white" : "none"} strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24"><path d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
                   <span>
                     {likeCount}
                   </span>

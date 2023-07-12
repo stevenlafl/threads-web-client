@@ -9,11 +9,9 @@ export default function User(props: any) {
   const my_user_id = props.my_user_id;
 
   const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({} as any);
 
   const fetchData = async () => {
-    setIsLoading(true);
     try {
       const response = await fetch('/api/user/' + user_id, {
         method: 'POST',
@@ -29,8 +27,6 @@ export default function User(props: any) {
       setUser(data.user);
     } catch (error) {
       console.log(error);
-    } finally {
-      setIsLoading(false);
     }
   };
 

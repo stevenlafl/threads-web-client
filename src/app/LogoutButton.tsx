@@ -1,19 +1,22 @@
 "use client";
 
+import { selectAuthState, setAuthState } from '@/store/authSlice';
 import { deleteCookie } from 'cookies-next';
 import Image from 'next/image'
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useDispatch } from 'react-redux';
 
 export default function LogoutButton() {
 
   const router = useRouter();
+  const dispatch = useDispatch();
 
   async function handleSubmit(e: any) {
     e.preventDefault();
-    deleteCookie('token');
-    deleteCookie('username');
-    deleteCookie('user_id');
+
+    dispatch(setAuthState(false));
+
     router.refresh();
   }
 
