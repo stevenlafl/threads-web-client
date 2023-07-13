@@ -172,7 +172,7 @@ export default function PostItem(props: any) {
     </div>
     <div className={(hasParent) ? "px-20" : "px-16"}>
         <p className="text-base width-auto font-medium text-white flex-shrink whitespace-pre-line">
-          <Link href={"/post/" + id}>
+          <Link href={"/post/" + id} className="block">
             {(post.caption) &&
               post.caption.text
             }
@@ -193,7 +193,7 @@ export default function PostItem(props: any) {
         }
       <p className="text-base width-auto font-medium text-white flex-shrink">
         {(hasAttachment) &&
-          <Link href={attachment.url} className="block">
+          <Link href={attachment.url} target="_blank" className="block">
             <Image className="mt-4" src={attachment.image_url} width="500" height="100" alt={''} />
             <span className="text-sm text-gray-500 block">
               {attachment.display_url}

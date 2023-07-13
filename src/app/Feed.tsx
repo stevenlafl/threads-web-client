@@ -15,6 +15,7 @@ export default function Feed(props: any) {
   const router = useRouter();
 
   const [thread, setThread] = useState(<></> as JSX.Element);
+  const [threadData, setThreadData] = useState([] as any[]);
   const [items, setItems] = useState([] as JSX.Element[]);
   const [nextMaxId, setNextMaxId] = useState(null as string | null);
   const [isLoading, setIsLoading] = useState(false);
@@ -73,6 +74,8 @@ export default function Feed(props: any) {
         data = await response.json();
 
         data.items = data.reply_threads;
+
+        setThreadData(data.containing_thread.thread_items[data.containing_thread.thread_items.length - 1].post);
 
         if (data.containing_thread) {
           setThread(
@@ -141,9 +144,11 @@ export default function Feed(props: any) {
     const newPost = <FeedItem key={item.id} token={token} item={{posts: [item]}}/>
     setItems(prevItems => [newPost, ...prevItems])
     let newFeed = JSON.parse(JSON.stringify(prevFeed));
+
+    console.log([threadData, item]);
     newFeed.items = [{
-      threaded_items: [item],
-      posts: [item]
+      threaded_items: [threadData, item],
+      posts: [threadData, item]
     },
     ...prevFeed.items];
     dispatch(setFeed(newFeed));
