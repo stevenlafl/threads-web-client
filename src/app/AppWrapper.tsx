@@ -28,13 +28,37 @@ export default function AppWrapper({
   const userId = useSelector(selectUserId);
   const userName = useSelector(selectUserName);
 
+  const [onPage, setOnPage] = useState('home');
+
+  const setCurrentPage = () => {
+    let matches = window.location.pathname.match(/^\/([^\/]*)/);
+    if (matches != null) {
+      setOnPage(matches[1] ? matches[1] : 'home');
+    }
+  }
+
+  const { pushState, replaceState } = window.history;
+
+  window.history.pushState = function (...args) {
+    pushState.apply(window.history, args);
+        window.dispatchEvent(new Event('pushState'));
+    };
+
+  window.history.replaceState = function (...args) {
+    replaceState.apply(window.history, args);
+    window.dispatchEvent(new Event('replaceState'));
+  };
+
+  window.addEventListener('navigate', setCurrentPage);
+  window.addEventListener('popstate', setCurrentPage);
+  window.addEventListener('replaceState', setCurrentPage);
+  window.addEventListener('pushState', setCurrentPage);
+
   if (loggedIn && token) {
     const profileURL = `/user/${userId}`;
 
     return (
       <div>
-        <div className="text-white">
-        </div>
         <div className="flex max-w-screen-xl w-screen">
           <div className="w-1/5 text-white py-4 h-1/3 mr-10">
             {/* <!--left menu--> */}
@@ -51,9 +75,8 @@ export default function AppWrapper({
               </g>
             </svg>
             <nav className="mt-5 px-2">
-              <a
-                href="/"
-                className="group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full bg-[#343638] text-gray-300"
+              <Link href="/"
+                className={"group flex items-center px-2 py-2 text-base leading-6 font-semibold rounded-full text-gray-300 hover:bg-[#343638] hover:text-gray-300" + (onPage == 'home' ? ' bg-[#343638]' : '')}
               >
                 <svg
                   className="mr-4 h-6 w-6 "
@@ -69,9 +92,9 @@ export default function AppWrapper({
                   />
                 </svg>
                 Home
-              </a>
+              </Link>
               <Link href='/notifications'
-                className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300"
+                className={"mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300" + (onPage == 'notifications' ? ' bg-[#343638]' : '')}
               >
                 <svg
                   className="mr-4 h-6 w-6"
@@ -86,7 +109,7 @@ export default function AppWrapper({
                 </svg>
                 Notifications
               </Link>
-              <Link href={profileURL} className="mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300">
+              <Link href={profileURL} className={"mt-1 group flex items-center px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-[#343638] hover:text-gray-300" + (onPage == 'user' ? ' bg-[#343638]' : '')}>
                 <svg
                   className="mr-4 h-6 w-6"
                   fill="none"

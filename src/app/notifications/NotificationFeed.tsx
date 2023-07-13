@@ -96,7 +96,7 @@ export default function Page(props: any) {
   
       setItems(prevItems => [...prevItems, ...newItems]);
 
-      console.log(response);
+      //console.log(response);
     } catch (error) {
       console.log(error);
     } finally {
@@ -132,8 +132,6 @@ export default function Page(props: any) {
   useEffect(() => {
     if (isFirstLoad) {
       setIsFirstLoad(false);
-
-      console.log('would load');
       fetchData();
     }
   }, []);
