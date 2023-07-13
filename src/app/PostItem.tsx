@@ -181,7 +181,7 @@ export default function PostItem(props: any) {
             }
             {(videos !== null && videos.length > 0) &&
               <video className="rounded-md border-solid border-2 border-[#343638] bg-[#343638] mt-4" controls loop>
-                <source src={"/api/video/" + encodeURIComponent(videos[0].url)} width={videos[0].width} height={videos[0].height} />
+                <source src={videos[0].url} width={videos[0].width} height={videos[0].height} />
               </video>
             }
           </Link>

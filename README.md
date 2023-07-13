@@ -78,6 +78,31 @@ Todo:
 12. Recommended users sidebar
 13. ???
 
+### Deploying to AWS
+
+```
+yarn build
+sam build
+```
+
+If first time (you have no `samconfig.toml`, run:
+
+```
+sam deploy --guided
+```
+
+Otherwise, for subsequent updates:
+
+```
+sam deploy
+```
+
+Then copy your static assets to wherever you selected for the s3 bucket (it prompts you for it in the `--guided` step):
+```
+aws s3 cp .next/static/ s3://<your bucket>/_next/static --recursive
+
+```
+
 ### Credits
 
 Uses [NextJS](https://github.com/vercel/next.js/) and [threads.js](https://github.com/threadsjs/threads.js) at the core

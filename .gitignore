@@ -34,6 +34,10 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# aws
+.aws-sam
+samconfig.toml
+
 # custom
 feed.json*
 recommends.json*
