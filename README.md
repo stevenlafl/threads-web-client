@@ -66,8 +66,10 @@ Todo:
 7. ~~View quotes~~
 5. ~~View repost~~
 6. ~~Add liking~~
-7. Add reposting
-8. ???
+7. ~~Add reposting~~
+8. Add quote posting
+9. Add account switching
+10. ???
 
 ### Credits
 
