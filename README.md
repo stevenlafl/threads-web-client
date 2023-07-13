@@ -69,7 +69,10 @@ Todo:
 7. ~~Add reposting~~
 8. Add quote posting
 9. Add account switching
-10. ???
+10. Follow/unfollow
+11. User search
+12. Recommended users sidebar
+13. ???
 
 ### Credits
 
