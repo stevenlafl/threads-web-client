@@ -9,6 +9,10 @@
 
 This project provides a desktop web client for Threads. Meta is too slow to implement, so I'm working on it. Mobile is not the best experience to work with.
 
+##### DISCLAIMER: This software is made without any support from Meta and is in no way related to the company or any of its developers. This client makes the experience similar to Twitter but it is much different in implementation (original is in bootstrap while this one uses Tailwind, with different iconography). Use of the GPLv3 license is a notice of intent that there be no financial reward for an end-resulting usage or implementation of this software - it is simply a hobby project, though personal donations to its contributors are welcome.
+
+##### NOTICE: Instagram's Threads API is undocumented so we cannot guarantee that you will not be suspended using this client. <br/> Please see [LICENSE](https://github.com/stevenlafl/threads-web-client/blob/master/LICENSE) for a notice of non-warranty and non-liability.
+
 ## Running
 
 ```
@@ -76,7 +80,7 @@ Todo:
 
 ### Credits
 
-Uses NextJS and threads.js at the core
+Uses [NextJS](https://github.com/vercel/next.js/) and [threads.js](https://github.com/threadsjs/threads.js) at the core
 
 For the frontend tailwind work, this great UI by @hiravesonali
 
