@@ -21,11 +21,14 @@ export default function Page(props: any) {
   const [items, setItems] = useState([] as JSX.Element[]);
 
   const fetchData = async () => {
+
+    if (isLoading) return;
     setIsLoading(true);
 
     try {
 
       let fetchFeed = ((Date.now()/1000) - lastFeed) > 60*5;
+      //let fetchFeed = true;
 
       let response = {} as any;
       if (!feed || fetchFeed || nextMaxId) {
@@ -124,7 +127,7 @@ export default function Page(props: any) {
   };
 
   useEffect(() => {
-    if (lastFeed === 0 && items.length === 0) {
+    if (!isFirstLoad && lastFeed === 0 && items.length === 0) {
       fetchData();
     }
   }, [lastFeed])

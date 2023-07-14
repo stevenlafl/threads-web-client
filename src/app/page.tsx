@@ -13,7 +13,7 @@ export default function Home() {
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
 
-  if (loggedIn && token) {
+  if (loggedIn) {
     return (
       <>
         <div className="flex">

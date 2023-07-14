@@ -39,6 +39,8 @@ export default function Feed(props: any) {
   };
 
   const fetchData = async () => {
+
+    if (isLoading) return;
     setIsLoading(true);
   
     try {

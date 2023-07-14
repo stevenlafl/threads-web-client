@@ -11,6 +11,7 @@ import AppWrapper from "./AppWrapper";
 import { Provider } from "react-redux";
 import { store, persistor } from "@/store";
 import { PersistGate } from "redux-persist/integration/react";
+import { useState } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,6 +21,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
 
+  console.log('loaded');
   return (
     <html lang="en">
       <head>

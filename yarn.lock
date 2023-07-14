@@ -219,10 +219,10 @@
   dependencies:
     tslib "^2.4.0"
 
-"@threadsjs/threads.js@^1.7.3":
-  version "1.7.3"
-  resolved "https://registry.yarnpkg.com/@threadsjs/threads.js/-/threads.js-1.7.3.tgz#3537a99b13a5e6c524fc9660b14d8b1362d12ec8"
-  integrity sha512-85/HOmSPLOIkHFU/7uEPngZkSJwB6eQO6I2X96MZrHbh2t4N1xuMVqSCXlRBworCm+vVJnuEXZa44sGBVrk/CQ==
+"@threadsjs/threads.js@^1.7.4":
+  version "1.7.4"
+  resolved "https://registry.yarnpkg.com/@threadsjs/threads.js/-/threads.js-1.7.4.tgz#bfbce9974f4bc44e87890cd654005601707f808a"
+  integrity sha512-fGZdS2pYCe4e5Yqog/VpoFFkDfTOfqsEwkibrvOfG8jOCkNZZjD6/2jJZSNd6RDOgcKaXUXLVsW4k+N02yZ+LA==
   dependencies:
     "@types/node" "^20.4.1"
     undici "^5.22.1"
@@ -626,6 +626,11 @@ client-only@0.0.1:
   resolved "https://registry.yarnpkg.com/client-only/-/client-only-0.0.1.tgz#38bba5d403c41ab150bff64a95c85013cf73bca1"
   integrity sha512-IV3Ou0jSMzZrd3pZ48nLkT9DA7Ag1pnPzaiQhpW7c3RbcqqzvzzVu+L8gfqMp/8IM2MQtSiqaCxrrcfu8I8rMA==
 
+clsx@^1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/clsx/-/clsx-1.2.1.tgz#0ddc4a20a549b59c93a4116bb26f5294ca17dc12"
+  integrity sha512-EcR6r5a8bj6pu3ycsa/E/cKVGuTgZJZdsyUYHOksG/UHIiKfjxzRxYJpyVBwYaQeOvghal9fcc4PidlgzugAQg==
+
 color-convert@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/color-convert/-/color-convert-2.0.1.tgz#72d3a68d598c9bdb3af2ad1e84f21d896abd4de3"
@@ -809,6 +814,13 @@ electron-to-chromium@^1.4.431:
   version "1.4.457"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.457.tgz#3fdc7b4f97d628ac6b51e8b4b385befb362fe343"
   integrity sha512-/g3UyNDmDd6ebeWapmAoiyy+Sy2HyJ+/X8KyvNeHfKRFfHaA2W8oF5fxD5F3tjBDcjpwo0iek6YNgxNXDBoEtA==
+
+emoji-picker-react@^4.4.9:
+  version "4.4.9"
+  resolved "https://registry.yarnpkg.com/emoji-picker-react/-/emoji-picker-react-4.4.9.tgz#564fc387ae2ce8c8086a12a9231d6fd9567d0ae5"
+  integrity sha512-ef9MfzSJy5xrzihLLv0e1zZmiNtcekubctTBQVfIpvKfsfu4iLBBzcHCmOC2IaUVBCZuUw+GM24BAPj1MdCQXQ==
+  dependencies:
+    clsx "^1.2.1"
 
 emoji-regex@^9.2.2:
   version "9.2.2"
@@ -2984,6 +2996,11 @@ yaml@^2.1.1:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/yaml/-/yaml-2.3.1.tgz#02fe0975d23cd441242aa7204e09fc28ac2ac33b"
   integrity sha512-2eHWfjaoXgTBC2jNM1LRef62VQa0umtvRiDSk6HSzW7RvS5YtkabJrwYLLEKWBc8a5U2PTSCs+dJjUTJdlHsWQ==
+
+yet-another-react-lightbox@^3.11.3:
+  version "3.11.3"
+  resolved "https://registry.yarnpkg.com/yet-another-react-lightbox/-/yet-another-react-lightbox-3.11.3.tgz#24f4b177e045720941d97eab60bbf614b43252c5"
+  integrity sha512-/Wb6QPXeg51XJIfFp+mwQlvoz+WJsSSZbBDRJopB6hL8SQWpqPKHxQcc3zpNmhgZWKtMZn6/XR1D6GrY/zPCWw==
 
 yocto-queue@^0.1.0:
   version "0.1.0"
