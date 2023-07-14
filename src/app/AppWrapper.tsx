@@ -99,12 +99,11 @@ export default function AppWrapper({
     }
   }
 
-  useEffect( () => {
-    if (isFirstLoad) {
-      setIsFirstLoad(false);
-      fetchData();
-    }
-  });
+  if (isFirstLoad) {
+    setIsFirstLoad(false);
+    setCurrentPage();
+    fetchData();
+  }
 
   if (loggedIn && token) {
     const profileURL = `/user/${userId}`;
@@ -297,7 +296,7 @@ export default function AppWrapper({
 
             <div className="flow-root text-center inline pt-4">
               <div className="flex-2">
-                <p className="text-sm leading-6 font-medium text-gray-600">
+                <div className="text-sm leading-6 font-medium text-gray-600">
                   <a href="https://github.com/stevenlafl/threads-web-client" target="_blank">threads-web-client</a>
                   { version && 
                     <div className={ version['update'] ? 'text-red-400' : ''}>
@@ -306,7 +305,7 @@ export default function AppWrapper({
                       ({ version['update'] ? 'update available' : 'up to date' })
                     </div>
                   }
-                </p>
+                </div>
               </div>
             </div>
           </div>

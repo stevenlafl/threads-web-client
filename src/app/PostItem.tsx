@@ -152,8 +152,16 @@ export default function PostItem(props: any) {
           }
           <Link href={"/user/" + (user.pk ? user.pk : '')}>
             <div className="flex items-center">
-              <div>
+              <div className="relative">
                 <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
+                { (post.user.friendship_status.following) && 
+                  <span className="text-white absolute -bottom-1 right-0">
+                    <svg className="svg-icon w-4 y-5" viewBox="0 0 20 20">
+                      <path fill="none" strokeWidth="3" stroke="black" d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"></path>
+                      <path fill="none" strokeWidth="2" stroke="yellow" d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"></path>
+                    </svg>
+                  </span>
+                }
               </div>
               <div className="ml-2">
                 <p className="text-base leading-6 font-medium text-white">
@@ -163,6 +171,11 @@ export default function PostItem(props: any) {
                   }
                   <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
                     @{user.username} - <ReactTimeAgo date={date} locale="en-US" />
+                  </span>
+                  <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
+                    {(post.user.friendship_status.followed_by) && 
+                      <>( follows you )</>
+                    }
                   </span>
                 </p>
               </div>
@@ -265,7 +278,7 @@ export default function PostItem(props: any) {
     </div>
     {/* <textarea defaultValue={JSON.stringify(post, null, 2)}></textarea> */}
     {hasChildren ?
-      <hr className="border-gray-800"></hr>
+      <hr className="border-gray-800 ml-8"></hr>
       :
       <hr className="border-gray-600"></hr>
     }
