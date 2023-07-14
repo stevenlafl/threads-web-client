@@ -13,6 +13,12 @@ export default function User(props: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [user, setUser] = useState({} as any);
 
+  const [isFollowing, setIsFollowing] = useState(false);
+  const [isMuting, setIsMuting] = useState(false);
+  const [isBlocking, setIsBlocking] = useState(false);
+  
+  const [feedLoaded, setFeedLoaded] = useState(false);
+
   const fetchData = async () => {
 
     if (isLoading) return;
@@ -47,8 +53,8 @@ export default function User(props: any) {
   }, []);
   return (
     <>
-      <UserItem token={token} user={user} my_user_id={my_user_id} />
-      <Feed token={token} user_id={user_id} />
+      <UserItem token={token} user={user} my_user_id={my_user_id} following={isFollowing} muting={isMuting} blocking={isBlocking} feedLoaded={feedLoaded} setFollowing={setIsFollowing} setMuting={setIsMuting} setBlocking={setIsBlocking} />
+      <Feed token={token} user_id={user_id} setFollowing={setIsFollowing} setMuting={setIsMuting} setBlocking={setIsBlocking} setFeedLoaded={setFeedLoaded} />
     </>
   )
 }

@@ -49,3 +49,9 @@ user_fetch.json*
 user_feed.json*
 notifications.json*
 version.json*
+mute.json*
+unmute.json*
+block.json*
+unblock.json*
+follow.json*
+unfollow.json*

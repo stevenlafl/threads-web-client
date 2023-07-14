@@ -8,14 +8,81 @@ export default function UserItem(props: any) {
   const user = props.user;
   const my_user_id = props.my_user_id;
 
+
+  // I know I can use redux, I will refactor later.
+  const setFollowing = props.setFollowing;
+  const setMuting = props.setMuting;
+  const setBlocking = props.setBlocking;
+
+  const isFollowing = props.following;
+  const isMuting = props.muting;
+  const isBlocking = props.blocking;
+
+  const feedLoaded = props.feedLoaded;
+
   //console.log(user);
 
-  const [isFollowing, setIsFollowing] = useState(false);
-
-  async function followUser(e: any) {
+  async function followAction(e: any) {
     e.preventDefault();
+    try {
+      const response = await fetch('/api/' + (isFollowing ? 'un' : '') + 'follow', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          user_id: user.pk,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
+      if (response.status === 'ok') {
+        setFollowing(!isFollowing);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  async function muteAction(e: any) {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/' + (isMuting ? 'un' : '') + 'mute', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          user_id: user.pk,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
+      if (response.status === 'ok') {
+        setMuting(!isMuting);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
+  async function blockAction(e: any) {
+    e.preventDefault();
+    try {
+      const response = await fetch('/api/' + (isBlocking ? 'un' : '') + 'block', {
+        method: 'POST',
+        body: JSON.stringify({
+          token: token,
+          user_id: user.pk,
+        }),
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then((res) => res.json());
+      if (response.status === 'ok') {
+        setBlocking(!isBlocking);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -23,6 +90,7 @@ export default function UserItem(props: any) {
       {(user) && 
         <div>
           <div className="p-4">
+            {(user.pk != my_user_id && feedLoaded) && 
               <div className="relative flex w-full">
                   {/* <!-- Avatar --> */}
                   <div className="flex flex-1">
@@ -34,14 +102,38 @@ export default function UserItem(props: any) {
                       </div>
                   </div>
                   {/* <!-- Follow Button --> */}
-                  {user.pk != my_user_id &&
-                    <div className="flex flex-col text-right mt-20">
-                        <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={followUser}>
-                            Follow
-                        </button>
-                    </div>
-                  }
+                  <div className="flex flex-col text-right mt-20">
+                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={followAction}>
+                        {(isFollowing) ? 
+                          'Unfollow'
+                          :
+                          'Follow'
+                          }
+                      </button>
+                  </div>
+                  {/* <!-- Follow Button --> */}
+                  <div className="flex flex-col text-right mt-20">
+                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={muteAction}>
+                        {(isMuting) ? 
+                          'Unmute'
+                          :
+                          'Mute'
+                          }
+                      </button>
+                  </div>
+                  {/* <!-- Follow Button --> */}
+                  <div className="flex flex-col text-right mt-20">
+                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={blockAction}>
+                        {(isBlocking) ? 
+                          'Unblock'
+                          :
+                          'Block'
+                          }
+                      </button>
+                  </div>
               </div>
+
+              }
       
               {/* <!-- Profile info --> */}
               <div className="space-y-1 justify-center w-full mt-3 ml-3">

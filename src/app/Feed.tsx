@@ -12,6 +12,11 @@ export default function Feed(props: any) {
   const token = props.token;
   const post_id = props.post_id;
   const user_id = props.user_id;
+  
+  const setFollowing = props.setFollowing;
+  const setMuting = props.setMuting;
+  const setBlocking = props.setBlocking;
+  const setFeedLoaded = props.setFeedLoaded;
 
   const router = useRouter();
 
@@ -128,8 +133,17 @@ export default function Feed(props: any) {
         }, false);
 
         if (item.posts.length > 0 && !exists) {
+
+          for (const post of item.posts) {
+            if (user_id && post.user.pk == user_id && post.user.friendship_status) {
+              setFollowing(post.user.friendship_status.following);
+              setMuting(post.user.friendship_status.muting);
+              setBlocking(post.user.friendship_status.blocking);
+              break;
+            }
+          }
           newItems.push(
-            <FeedItem key={item.id} token={token} item={item} />
+            <FeedItem key={item.id} token={token} item={item} setFollowing={setFollowing} />
           )
         }
       }
@@ -140,6 +154,9 @@ export default function Feed(props: any) {
     } finally {
       setIsLoading(false);
       setRefreshClicked(false);
+      if (setFeedLoaded) {
+        setFeedLoaded(true);
+      }
     }
   };
 
