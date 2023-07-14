@@ -9,8 +9,8 @@ dependencies:
     specifier: ^1.9.5
     version: 1.9.5(react-redux@8.1.1)(react@18.2.0)
   '@threadsjs/threads.js':
-    specifier: ^1.7.4
-    version: 1.7.4
+    specifier: ^1.8.1
+    version: 1.8.1
   '@types/node':
     specifier: 20.4.1
     version: 20.4.1
@@ -346,8 +346,8 @@ packages:
       tslib: 2.6.0
     dev: false
 
-  /@threadsjs/threads.js@1.7.4:
-    resolution: {integrity: sha512-fGZdS2pYCe4e5Yqog/VpoFFkDfTOfqsEwkibrvOfG8jOCkNZZjD6/2jJZSNd6RDOgcKaXUXLVsW4k+N02yZ+LA==}
+  /@threadsjs/threads.js@1.8.1:
+    resolution: {integrity: sha512-RqzxXb5L3+XkethXOgD7ssExpJxmjTnUbSj4MeZbeGN4SKEJ0KuTBHHOoNVe89Vj5PZzocalnWZmDQY+j0zVyA==}
     dependencies:
       '@types/node': 20.4.1
       undici: 5.22.1
