@@ -3,18 +3,18 @@ import { Client } from '@threadsjs/threads.js';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, post_id } = req.body;
+  const { token, user_id } = req.body;
   
   let payload: any = {};
 
-  if (fs.existsSync('./unlike.json')) {
-    console.log('sent test unlike');
-    payload = JSON.parse(fs.readFileSync('./unlike.json', 'utf8'));
+  if (fs.existsSync('./unmute.json')) {
+    console.log('sent test unmute');
+    payload = JSON.parse(fs.readFileSync('./unmute.json', 'utf8'));
   }
   else {
     try {
       const client = new Client({ token });
-      payload = await client.posts.unlike(post_id, "1");
+      payload = await client.friendships.unmute(user_id);
     } catch (e: any) {
       payload['error'] = e.message;
     }
