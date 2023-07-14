@@ -21,7 +21,7 @@ docker run -it -p 3000:3000 stevenlafl/threads-web-client:latest
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-Now you are presented with a login screen. This login screen **only exchanges a username/password combination for a token** and stores it on your browser as a cookie. Subsequent requests use that cookie's token value to do everything. This has no backend storage, so any browser session will work perfectly fine. I run the one instance and have multiple people accessing it for their feeds.
+Now you are presented with a login screen. This login screen **only exchanges a username/password combination for a token** and stores it on your browser in localStorage along with the application state. Subsequent requests use that localStorage's token value to do everything. This has no backend storage, so any browser session will work perfectly fine. I run the one instance and have multiple people accessing it for their feeds.
 
 You'll be presented a page like this:
 

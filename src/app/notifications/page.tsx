@@ -11,7 +11,9 @@ export default function Page({ params }: { params: { slug: string } }) {
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
 
-  if (loggedIn && token) {
+  console.log('notifications');
+
+  if (loggedIn) {
 
     return (
       <>

@@ -18,7 +18,9 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const user_id = params.slug;
 
-  if (loggedIn && token) {
+  console.log('test');
+
+  if (loggedIn ) {
     return (
       <>
         <div className="flex">

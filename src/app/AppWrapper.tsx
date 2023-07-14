@@ -16,12 +16,22 @@ TimeAgo.addDefaultLocale(en)
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthState, selectToken, selectUserId, selectUserName, setAuthState } from "../store/authSlice";
+import { selectLastVersion, selectVersion, setLastVersion, setVersion } from "@/store/prevSlice";
 
 export default function AppWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  const dispatch = useDispatch();
+  
+  const [versionData, setVersionData] = useState({current: 0, last: 0, update: false});
+  const version = useSelector(selectVersion);
+  const lastVersion = useSelector(selectLastVersion);
+
+  const [isLoading, setIsLoading] = useState(false);
+  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
@@ -53,6 +63,48 @@ export default function AppWrapper({
   window.addEventListener('popstate', setCurrentPage);
   window.addEventListener('replaceState', setCurrentPage);
   window.addEventListener('pushState', setCurrentPage);
+
+  const fetchData = async () => {
+    if (isLoading) return;
+    setIsLoading(true);
+    
+    try {
+      
+      console.log('fetching version');
+      const fetchVersion = !version || ((Date.now()/1000) - lastVersion) > 60*5;
+
+      let data = {} as typeof versionData;
+      if (fetchVersion) {
+        data = await fetch('/api/version', {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }).then(res => res.json());
+
+        dispatch(setVersion(data));
+        dispatch(setLastVersion(Date.now()/1000));
+      }
+      else {
+        data = version;
+      }
+
+      console.log(data);
+
+      setVersionData(data);
+
+    } catch(e) {
+      console.error(e);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  useEffect( () => {
+    if (isFirstLoad) {
+      setIsFirstLoad(false);
+      fetchData();
+    }
+  });
 
   if (loggedIn && token) {
     const profileURL = `/user/${userId}`;
@@ -243,10 +295,17 @@ export default function AppWrapper({
               </div>
             </div>
 
-            <div className="flow-root m-6 inline">
+            <div className="flow-root text-center inline pt-4">
               <div className="flex-2">
                 <p className="text-sm leading-6 font-medium text-gray-600">
-                  Threads
+                  <a href="https://github.com/stevenlafl/threads-web-client" target="_blank">threads-web-client</a>
+                  { version && 
+                    <div className={ version['update'] ? 'text-red-400' : ''}>
+                      current: { version['current'] } | latest: { version['latest'] }
+                      <br/>
+                      ({ version['update'] ? 'update available' : 'up to date' })
+                    </div>
+                  }
                 </p>
               </div>
             </div>

@@ -1,13 +1,33 @@
 "use client";
 
-import { useState } from 'react';
+import useAutosizeTextArea from '@/hooks/useAutosizeTextArea';
+import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
+import { useEffect, useRef, useState } from 'react';
 
 export default function LoginForm(props: any) {
 
   const [text, setText] = useState("");
+  const [showEmoji, setShowEmoji] = useState(false);
+  const textAreaRef = useRef<HTMLTextAreaElement>(null);
+  const emojiRef = useRef(null as any);
+  const emojiButton = useRef(null as any);
+
+  useAutosizeTextArea(textAreaRef.current, text);
+
   const token = props.token;
   const post_id = props.post_id;
   const addPost: any = props.addPost;
+
+  async function onEmojiClick(emojiObject: any, event: any) {
+    console.log(emojiObject);
+    const cursor = textAreaRef.current?.selectionStart;
+    const msg = text.slice(0, cursor) + emojiObject.emoji + text.slice(cursor);
+    setText(msg);
+
+    // Codes added for the new cursor
+    const newCursor = cursor + emojiObject.emoji.length
+    setTimeout(() => textAreaRef.current?.setSelectionRange(newCursor, newCursor), 10)
+  };
 
   async function handleChange(e: any) {
     setText(e.target.value);
@@ -48,6 +68,20 @@ export default function LoginForm(props: any) {
     setText("")
   }
 
+  function windowClick(e: any) {
+
+    if (showEmoji && !emojiRef.current?.contains(e.target) && !emojiButton.current?.contains(e.target)) {
+      setShowEmoji(false);
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('click', windowClick);
+    return () => {
+      window.removeEventListener('click', windowClick);
+    }
+  });
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="flex">
@@ -55,8 +89,10 @@ export default function LoginForm(props: any) {
               {/* <img className="inline-block h-10 w-10 rounded-full" src="" alt="" /> */}
           </div>
           <div className="flex-1 px-2 pt-2 mt-2">
-              <textarea className=" bg-transparent text-[#5F5F5F] font-medium text-lg w-full" rows={2} cols={50} placeholder="What's happening?" name="text" value={text} onChange={handleChange}></textarea>
-          </div>                    
+              <textarea ref={textAreaRef} className="bg-[#323232] text-white rounded font-medium text-lg w-full p-2" rows={2} cols={50} style={{resize: 'none'}} placeholder="What's happening?" name="text" value={text} onChange={handleChange}></textarea>
+          </div>
+          <div className="m-2 w-2 py-1">
+          </div>
       </div>
       <div className="flex">
           <div className="w-10"></div>
@@ -82,10 +118,16 @@ export default function LoginForm(props: any) {
                       </a>
                   </div>
 
-                  <div className="flex-1 text-center py-2 m-2">
-                      <a className="mt-1 group flex items-center text-gray-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300" target="_blank">
-                      <svg className="text-center h-7 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24" /*style="--darkreader-inline-stroke: currentColor;"*/ data-darkreader-inline-stroke=""><path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                  </a>
+                  <div className="flex-1 text-center py-2 m-2 relative">
+                      <a ref={emojiButton} className="mt-1 group flex items-center text-gray-400 px-2 py-2 text-base leading-6 font-medium rounded-full hover:bg-gray-800 hover:text-gray-300" target="_blank" onClick={() => {setShowEmoji(!showEmoji)}}>
+                          <svg className="text-center h-7 w-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" stroke="currentColor" viewBox="0 0 24 24" /*style="--darkreader-inline-stroke: currentColor;"*/ data-darkreader-inline-stroke=""><path d="M14.828 14.828a4 4 0 01-5.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                      </a>
+
+                      { showEmoji && 
+                        <div ref={emojiRef} style={{ position: 'absolute', top: 48, left: -154, zIndex: 1 }}>
+                          <EmojiPicker onEmojiClick={onEmojiClick} emojiStyle={EmojiStyle.NATIVE} autoFocusSearch={false} />
+                        </div>
+                      }
                   </div>
               </div>
           </div>

@@ -20,7 +20,7 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const post_id = params.slug;
 
-  if (loggedIn && token) {
+  if (loggedIn) {
 
     return (
       <>
