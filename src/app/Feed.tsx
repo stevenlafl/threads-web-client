@@ -6,12 +6,13 @@ import PostForm from './PostForm';
 import { selectFeed, selectLastFeed, setFeed, setLastFeed } from '@/store/prevSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
+import ScrollToTop from 'react-scroll-to-top';
 
 export default function Feed(props: any) {
   const token = props.token;
   const post_id = props.post_id;
   const user_id = props.user_id;
-  
+
   const router = useRouter();
 
   const [thread, setThread] = useState(<></> as JSX.Element);
@@ -26,7 +27,7 @@ export default function Feed(props: any) {
   const prevFeed = useSelector(selectFeed);
   const lastPrevFeed = useSelector(selectLastFeed);
 
-  const handleScroll = () =>  {
+  const handleScroll = () => {
     if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight || isLoading) {
       return;
     }
@@ -34,7 +35,7 @@ export default function Feed(props: any) {
     if (nextMaxId === null || nextMaxId === undefined) {
       return;
     }
-    
+
     fetchData();
   };
 
@@ -42,7 +43,7 @@ export default function Feed(props: any) {
 
     if (isLoading) return;
     setIsLoading(true);
-  
+
     try {
       let data = {} as any;
 
@@ -81,15 +82,15 @@ export default function Feed(props: any) {
 
         if (data.containing_thread) {
           setThread(
-            <FeedItem key={data.containing_thread.id} token={token} item={data.containing_thread}/>
+            <FeedItem key={data.containing_thread.id} token={token} item={data.containing_thread} />
           )
         }
-        
+
         setNextMaxId(data.paging_tokens.downwards);
       }
       else {
-        const fetchPrevFeed = !prevFeed || ((Date.now()/1000) - lastPrevFeed) > 60*5;
-        
+        const fetchPrevFeed = !prevFeed || ((Date.now() / 1000) - lastPrevFeed) > 60 * 5;
+
         // Grab a new feed if it'd been long enough.
         // Always attempt to paginate.
         if (!prevFeed || fetchPrevFeed || nextMaxId) {
@@ -109,13 +110,13 @@ export default function Feed(props: any) {
           // the main feed. Only cache the first page.
           if (!nextMaxId) {
             dispatch(setFeed(data));
-            dispatch(setLastFeed(Date.now()/1000));
+            dispatch(setLastFeed(Date.now() / 1000));
           }
         }
         else {
           data = prevFeed;
         }
-        
+
         setNextMaxId(data.next_max_id);
       }
 
@@ -128,11 +129,11 @@ export default function Feed(props: any) {
 
         if (item.posts.length > 0 && !exists) {
           newItems.push(
-            <FeedItem key={item.id} token={token} item={item}/>
+            <FeedItem key={item.id} token={token} item={item} />
           )
         }
       }
-  
+
       setItems(prevItems => [...prevItems, ...newItems]);
     } catch (error) {
       console.log(error);
@@ -143,7 +144,7 @@ export default function Feed(props: any) {
   };
 
   const addPost = (item: any) => {
-    const newPost = <FeedItem key={item.id} token={token} item={{posts: [item]}}/>
+    const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
     setItems(prevItems => [newPost, ...prevItems])
     let newFeed = JSON.parse(JSON.stringify(prevFeed));
 
@@ -169,7 +170,7 @@ export default function Feed(props: any) {
       dispatch(setLastFeed(0));
     }
   }
-  
+
   useEffect(() => {
     if (refreshClicked) {
       fetchData();
@@ -192,13 +193,13 @@ export default function Feed(props: any) {
 
   return (
     <>
-      {(post_id) && 
+      {(post_id) &&
         <div>
           {thread}
         </div>
       }
       <div>
-        {!user_id && 
+        {!user_id &&
           <PostForm token={token} addPost={addPost} post_id={post_id} />
         }
         <hr className="border-b-gray-800" />
@@ -212,6 +213,13 @@ export default function Feed(props: any) {
       }
       <div>
         {items}
+
+        <ScrollToTop
+          smooth
+          viewBox="0 0 256 256"
+          svgPath="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm37.66-101.66a8,8,0,0,1-11.32,11.32L136,107.31V168a8,8,0,0,1-16,0V107.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0Z"
+          className='scroll-to-top flex items-center justify-center'
+        />
       </div>
     </>
   )
