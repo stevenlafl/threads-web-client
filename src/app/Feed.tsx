@@ -88,7 +88,7 @@ export default function Feed(props: any) {
         setNextMaxId(data.paging_tokens.downwards);
       }
       else {
-        const fetchPrevFeed = ((Date.now()/1000) - lastPrevFeed) > 60*5;
+        const fetchPrevFeed = !prevFeed || ((Date.now()/1000) - lastPrevFeed) > 60*5;
         
         // Grab a new feed if it'd been long enough.
         // Always attempt to paginate.

@@ -27,7 +27,7 @@ export default function Page(props: any) {
 
     try {
 
-      let fetchFeed = ((Date.now()/1000) - lastFeed) > 60*5;
+      let fetchFeed = !feed || ((Date.now()/1000) - lastFeed) > 60*5;
       //let fetchFeed = true;
 
       let response = {} as any;

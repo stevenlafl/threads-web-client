@@ -1,7 +1,7 @@
 "use client";
 
 import useAutosizeTextArea from '@/hooks/useAutosizeTextArea';
-import EmojiPicker from 'emoji-picker-react';
+import EmojiPicker, { EmojiStyle } from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
 
 export default function LoginForm(props: any) {
@@ -89,7 +89,7 @@ export default function LoginForm(props: any) {
               {/* <img className="inline-block h-10 w-10 rounded-full" src="" alt="" /> */}
           </div>
           <div className="flex-1 px-2 pt-2 mt-2">
-              <textarea ref={textAreaRef} className="bg-[#323232] text-[#5F5F5F] rounded font-medium text-lg w-full p-2" rows={2} cols={50} style={{resize: 'none'}} placeholder="What's happening?" name="text" value={text} onChange={handleChange}></textarea>
+              <textarea ref={textAreaRef} className="bg-[#323232] text-white rounded font-medium text-lg w-full p-2" rows={2} cols={50} style={{resize: 'none'}} placeholder="What's happening?" name="text" value={text} onChange={handleChange}></textarea>
           </div>
           <div className="m-2 w-2 py-1">
           </div>
@@ -125,7 +125,7 @@ export default function LoginForm(props: any) {
 
                       { showEmoji && 
                         <div ref={emojiRef} style={{ position: 'absolute', top: 48, left: -154, zIndex: 1 }}>
-                          <EmojiPicker onEmojiClick={onEmojiClick} />
+                          <EmojiPicker onEmojiClick={onEmojiClick} emojiStyle={EmojiStyle.NATIVE} autoFocusSearch={false} />
                         </div>
                       }
                   </div>

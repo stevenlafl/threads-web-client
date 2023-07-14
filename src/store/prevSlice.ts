@@ -7,12 +7,16 @@ import { AppStore } from "./appStore";
 export interface PrevState {
   lastFeed: number,
   feed: any;
+  lastVersion: number;
+  version: any;
 }
 
 // Initial state
 const initialState: PrevState = {
   lastFeed: 0,
   feed: [],
+  lastVersion: 0,
+  version: [],
 };
 
 // Actual Slice
@@ -26,6 +30,12 @@ export const prevSlice = createSlice({
     },
     setLastFeed(state, action) {
       state.lastFeed = action.payload;
+    },
+    setVersion(state, action) {
+      state.version = action.payload;
+    },
+    setLastVersion(state, action) {
+      state.lastVersion = action.payload;
     }
   },
 
@@ -43,9 +53,13 @@ export const prevSlice = createSlice({
 export const {
   setFeed,
   setLastFeed,
+  setVersion,
+  setLastVersion
 } = prevSlice.actions;
 
 export const selectFeed = (state: AppStore) => state.prev.feed;
 export const selectLastFeed = (state: AppStore) => state.prev.lastFeed;
+export const selectVersion = (state: AppStore) => state.prev.version;
+export const selectLastVersion = (state: AppStore) => state.prev.lastVersion;
 
 export default prevSlice.reducer;
