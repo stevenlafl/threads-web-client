@@ -13,13 +13,19 @@ export default function NotificationItem(props: any) {
   const isNew = props.new;
 
   const urlConverter = (text: string) => {
-    let matches = text.match(/([^\?]*)\?id=([^_]*)/);
-    return [matches![1], matches![2]];
-  }
+    if (text) {
+      let matches = text.match(/([^\?]*)\?id=([^_]*)/);
+      if (matches) {
+        return [matches[1], matches[2]];
+      }
+    }
+    return ['', ''];
+  };
 
   const profile_image = item.args.profile_image;
   const username = item.args.profile_name;
-  const action = item.args.rich_text.match(/\{[^\}]*\} (.*)/)[1];
+  const action = item.args.rich_text?.match(/\{[^\}]*\} (.*)/)?.[1] || '';
+
 
   let [_, profile_id] = urlConverter(item.args.profile_image_destination);
   let [type, post_id] = urlConverter(item.args.destination);
