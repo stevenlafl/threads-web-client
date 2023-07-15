@@ -3,7 +3,7 @@ import { Client } from '@threadsjs/threads.js';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, post_id } = req.body;
+  const { token, my_user_id, post_id } = req.body;
   
   let payload: any = {};
 
@@ -14,7 +14,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   else {
     try {
       const client = new Client({ token });
-      payload = await client.posts.unlike(post_id, "1");
+      payload = await client.posts.unlike(post_id, my_user_id);
     } catch (e: any) {
       payload['error'] = e.message;
     }

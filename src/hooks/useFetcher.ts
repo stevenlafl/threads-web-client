@@ -1,12 +1,13 @@
 // @see: https://medium.com/@oherterich/creating-a-textarea-with-dynamic-height-using-react-and-typescript-5ed2d78d9848
 
-import { selectToken } from "@/store/authSlice";
+import { selectToken, selectUserId } from "@/store/authSlice";
 import { useSelector } from "react-redux";
 
 // Updates the height of a <textarea> when the value changes.
 const useFetcher = () => {
 
   const token = useSelector(selectToken);
+  const my_user_id = useSelector(selectUserId);
 
   return async (endpoint: string, data: Object = {}) => {
     
@@ -14,6 +15,7 @@ const useFetcher = () => {
       method: 'POST',
       body: JSON.stringify({
         token: token,
+        my_user_id: my_user_id,
         ...data
       }),
       headers: {
