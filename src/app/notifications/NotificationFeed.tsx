@@ -23,77 +23,93 @@ export default function Page(props: any) {
 
   const fetcher = useFetcher();
 
-  const fetchData = async () => {
+  const {
+    status,
+    data,
+    error,
+    fetchNextPage,
+    refetch,
+  } = useInfiniteQuery(
+    ['feed', { user_id: user_id, post_id: post_id }],
+    async ({ pageParam = null }) => {
 
-    if (isLoading) return;
-    setIsLoading(true);
+      if (isLoading) return;
+      setIsLoading(true);
 
-    try {
+      try {
 
-      let fetchFeed = !feed || ((Date.now()/1000) - lastFeed) > 60*5;
-      //let fetchFeed = true;
+        let fetchFeed = !feed || ((Date.now()/1000) - lastFeed) > 60*5;
+        //let fetchFeed = true;
 
-      let response = {} as any;
-      if (!feed || fetchFeed || nextMaxId) {
-        response = await fetcher('/api/notifications', {
-          max_id: nextMaxId,
-          firstRecordTime: firstRecordTime
-        });
+        let response = {} as any;
+        if (!feed || fetchFeed || nextMaxId) {
+          response = await fetcher('/api/notifications', {
+            max_id: nextMaxId,
+            firstRecordTime: firstRecordTime
+          });
 
-        if (response.new_stories.length > 0) {
-          await fetcher('/api/clearnotifications');
+          if (response.new_stories.length > 0) {
+            await fetcher('/api/clearnotifications');
+          }
+
+          // Clone
+          let newNot = JSON.parse(JSON.stringify(response));
+          newNot.old_stories = [...response.new_stories, ...response.old_stories]; 
+          newNot.new_stories = [];
+          dispatch(setNotifications(newNot));
+          dispatch(setLastNotifications(Date.now()/1000));
+        }
+        else {
+          response = feed;
         }
 
-        // Clone
-        let newNot = JSON.parse(JSON.stringify(response));
-        newNot.old_stories = [...response.new_stories, ...response.old_stories]; 
-        newNot.new_stories = [];
-        dispatch(setNotifications(newNot));
-        dispatch(setLastNotifications(Date.now()/1000));
-      }
-      else {
-        response = feed;
-      }
+        setNextMaxId(response.next_max_id);
+        setFirstRecordTime(response.pagination_first_record_timestamp)
 
-      setNextMaxId(response.next_max_id);
-      setFirstRecordTime(response.pagination_first_record_timestamp)
+        const newItems = [] as JSX.Element[];
+        for (let item of response.new_stories) {
+          let exists = items.reduce((acc, cur) => {
+            if (cur.key == item.pk) return true;
+            return acc;
+          }, false);
 
-      const newItems = [] as JSX.Element[];
-      for (let item of response.new_stories) {
-        let exists = items.reduce((acc, cur) => {
-          if (cur.key == item.pk) return true;
-          return acc;
-        }, false);
-
-        if (!exists) {
-          newItems.push(
-            <NotificationItem key={item.pk} item={item} new={true} />
-          )
+          if (!exists) {
+            newItems.push(
+              <NotificationItem key={item.pk} item={item} new={true} />
+            )
+          }
         }
-      }
 
-      for (let item of response.old_stories) {
-        let exists = items.reduce((acc, cur) => {
-          if (cur.key == item.pk) return true;
-          return acc;
-        }, false);
+        for (let item of response.old_stories) {
+          let exists = items.reduce((acc, cur) => {
+            if (cur.key == item.pk) return true;
+            return acc;
+          }, false);
 
-        if (!exists) {
-          newItems.push(
-            <NotificationItem key={item.pk} item={item} new={false} />
-          )
+          if (!exists) {
+            newItems.push(
+              <NotificationItem key={item.pk} item={item} new={false} />
+            )
+          }
         }
-      }
-  
-      setItems(prevItems => [...prevItems, ...newItems]);
+    
+        setItems(prevItems => [...prevItems, ...newItems]);
 
-      //console.log(response);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  }
+        //console.log(response);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsLoading(false);
+      }
+    },
+    {
+      getPreviousPageParam: (firstPage) => null,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+      keepPreviousData: true,
+      cacheTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 4, // 4 minutes
+    },
+  )
 
   const handleScroll = () =>  {
     if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight || isLoading) {

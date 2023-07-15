@@ -99,11 +99,13 @@ export default function AppWrapper({
     }
   }
 
+  useEffect(() => {
     if (isFirstLoad) {
       setIsFirstLoad(false);
       setCurrentPage();
       fetchData();
     }
+  })
 
   if (loggedIn && token) {
     const profileURL = `/user/${userId}`;

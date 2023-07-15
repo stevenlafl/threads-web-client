@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import FeedItem from './FeedItem';
 import PostForm from './PostForm';
 import { selectFeed, selectLastFeed, setFeed, setLastFeed } from '@/store/prevSlice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useRouter } from 'next/navigation';
 import ScrollToTop from 'react-scroll-to-top';
+
 import useFetcher from '@/hooks/useFetcher';
+import { InView } from 'react-intersection-observer'
+import {
+  useInfiniteQuery,
+} from '@tanstack/react-query'
 
 export default function Feed(props: any) {
   const token = props.token;
@@ -19,124 +23,82 @@ export default function Feed(props: any) {
   const setBlocking = props.setBlocking;
   const setFeedLoaded = props.setFeedLoaded;
 
-  const router = useRouter();
-
   const [thread, setThread] = useState(<></> as JSX.Element);
   const [threadData, setThreadData] = useState([] as any[]);
   const [items, setItems] = useState([] as JSX.Element[]);
-  const [nextMaxId, setNextMaxId] = useState(null as string | null);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
-  const [refreshClicked, setRefreshClicked] = useState(false);
-
-  const dispatch = useDispatch();
-  const prevFeed = useSelector(selectFeed);
-  const lastPrevFeed = useSelector(selectLastFeed);
 
   const fetcher = useFetcher();
 
-  const handleScroll = () => {
-    if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight || isLoading) {
-      return;
-    }
+  const x = useInfiniteQuery([], async ({ pageParam = null }) => {},{} as any);
 
-    if (nextMaxId === null || nextMaxId === undefined) {
-      return;
-    }
-
-    fetchData();
-  };
-
-  const fetchData = async () => {
-
-    if (isLoading) return;
-    setIsLoading(true);
-
-    try {
-      let data = {} as any;
+  const {
+    status,
+    data,
+    error,
+    fetchNextPage,
+    refetch,
+    a,
+  } = useInfiniteQuery(
+    ['feed', { user_id: user_id, post_id: post_id }],
+    async ({ pageParam = null }) => {
+      let apiData = {} as any;
 
       if (user_id) {
-        data = await fetcher('/api/feed/' + user_id, {
-          max_id: nextMaxId
+        apiData = await fetcher('/api/feed/' + user_id, {
+          max_id: pageParam == 'NONE' ? '' : pageParam
         });
-        data.items = data.threads;
-
-        setNextMaxId(data.next_max_id);
+        apiData.items = apiData.threads;
+        apiData.nextPage = apiData.next_max_id;
       }
       else if (post_id) {
-        data = await fetcher('/api/post/' + post_id, {
-          max_id: nextMaxId
+        apiData = await fetcher('/api/post/' + post_id, {
+          max_id: pageParam
         });
-        data.items = data.reply_threads;
+        apiData.items = apiData.reply_threads;
 
-        setThreadData(data.containing_thread.thread_items[data.containing_thread.thread_items.length - 1].post);
+        setThreadData(apiData.containing_thread.thread_items[apiData.containing_thread.thread_items.length - 1].post);
 
-        if (data.containing_thread) {
+        if (apiData.containing_thread) {
           setThread(
-            <FeedItem key={data.containing_thread.id} token={token} item={data.containing_thread} />
+            <FeedItem key={apiData.containing_thread.id} token={token} item={apiData.containing_thread} />
           )
         }
 
-        setNextMaxId(data.paging_tokens.downwards);
+        apiData.nextPage = apiData.paging_tokens.downwards;
       }
       else {
-        const fetchPrevFeed = !prevFeed || ((Date.now() / 1000) - lastPrevFeed) > 60 * 5;
-
-        // Grab a new feed if it'd been long enough.
-        // Always attempt to paginate.
-        if (!prevFeed || fetchPrevFeed || nextMaxId) {
-          data = await fetcher('/api/feed', {
-            max_id: nextMaxId
-          });
-
-          // We're fetching the main /api/feed and not /api/post/xxx, so it's
-          // the main feed. Only cache the first page.
-          if (!nextMaxId) {
-            dispatch(setFeed(data));
-            dispatch(setLastFeed(Date.now() / 1000));
-          }
-        }
-        else {
-          data = prevFeed;
-        }
-
-        setNextMaxId(data.next_max_id);
+        apiData = await fetcher('/api/feed', {
+          max_id: pageParam
+        });
+        
+        apiData.nextPage = apiData.next_max_id;
       }
 
-      const newItems = [] as JSX.Element[];
-      for (let item of data.items) {
-        let exists = items.reduce((acc, cur) => {
-          if (cur.key == item.id) return true;
-          return acc;
-        }, false);
-
-        if (item.posts.length > 0 && !exists) {
-
-          for (const post of item.posts) {
-            if (user_id && post.user.pk == user_id && post.user.friendship_status) {
-              setFollowing(post.user.friendship_status.following);
-              setMuting(post.user.friendship_status.muting);
-              setBlocking(post.user.friendship_status.blocking);
-              break;
-            }
+      for (let item of apiData.items) {
+        for (const post of item.posts) {
+          if (user_id && post.user.pk == user_id && post.user.friendship_status) {
+            setFollowing(post.user.friendship_status.following);
+            setMuting(post.user.friendship_status.muting);
+            setBlocking(post.user.friendship_status.blocking);
+            break;
           }
-          newItems.push(
-            <FeedItem key={item.id} token={token} item={item} setFollowing={setFollowing} />
-          )
         }
       }
 
-      setItems(prevItems => [...prevItems, ...newItems]);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-      setRefreshClicked(false);
       if (setFeedLoaded) {
         setFeedLoaded(true);
       }
-    }
-  };
+
+      return apiData;
+    },
+    {
+      getPreviousPageParam: (firstPage) => null,
+      getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
+      keepPreviousData: true,
+      cacheTime: 1000 * 60 * 5, // 5 minutes
+      staleTime: 1000 * 60 * 4, // 4 minutes
+    },
+  )
 
   const addPost = (item: any) => {
     const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
@@ -152,39 +114,14 @@ export default function Feed(props: any) {
     dispatch(setFeed(newFeed));
   }
 
-  const handleRefreshBtn = async (e: any) => {
-    e.preventDefault();
-
-    setItems([]);
-    setNextMaxId(null);
-
-    setRefreshClicked(true);
-
-    // Only set last feed for homepage.
-    if (!post_id && !user_id) {
-      dispatch(setLastFeed(0));
-    }
-  }
-
-  useEffect(() => {
-    if (refreshClicked) {
-      fetchData();
-    }
-  }, [refreshClicked])
-
-  useEffect(() => {
-    if (isFirstLoad) {
-      setIsFirstLoad(false);
-      fetchData();
-    }
-  }, []);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    }
-  }, [isLoading, nextMaxId]);
+  // useEffect(() => {
+  //   if (inView && status == 'success' && hasNextPage && !isFetching) {
+  //     console.log(status, hasNextPage, isFetching);
+  //     fetchNextPage({
+  //       pageParam: null,
+  //     })
+  //   }
+  // }, [inView])
 
   return (
     <>
@@ -200,14 +137,30 @@ export default function Feed(props: any) {
         <hr className="border-b-gray-800" />
       </div>
       {(!post_id) &&
-        <button className="text-white float-right" onClick={handleRefreshBtn}>
+        <button className="text-white float-right" onClick={() => refetch({
+          refetchPage: (_: any, index: any) => index === 0,
+        })}>
           <svg className="h-10 w-10 text-white mr-5 mt-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
         </button>
       }
       <div>
-        {items}
+        {status === 'loading' ? (
+          <p className="text-white text-center">Loading...</p>
+        ) : status === 'error' ? (
+          <span className="text-white">Error: {(error as any).message}</span>
+        ) : (
+          <>
+            { data?.pages.map((page, i) => (
+              <>
+                {page.items.map((item: any) => (
+                  <FeedItem key={item.id} token={token} item={item} />
+                ))}
+              </>
+            ))}
+          </>
+        )}
 
         <ScrollToTop
           smooth
@@ -215,7 +168,16 @@ export default function Feed(props: any) {
           svgPath="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm37.66-101.66a8,8,0,0,1-11.32,11.32L136,107.31V168a8,8,0,0,1-16,0V107.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0Z"
           className='scroll-to-top flex items-center justify-center'
         />
+
+        <InView as="div" initialInView onChange={inView => {
+          if (inView) {
+            fetchNextPage({
+              pageParam: null,
+            })
+          }
+        }}/>
       </div>
     </>
   )
+
 }

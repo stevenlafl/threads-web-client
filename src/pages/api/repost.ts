@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from '@threadsjs/threads.js';
+import { setTimeout } from 'timers/promises';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -7,9 +8,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   let payload: any = {};
 
-  if (fs.existsSync('./repost.json')) {
+  if (fs.existsSync('./json/repost.json')) {
     console.log('sent test post');
-    payload = JSON.parse(fs.readFileSync('./repost.json', 'utf8'));
+    payload = JSON.parse(fs.readFileSync('./json/repost.json', 'utf8'));
+    await setTimeout(1000);
   }
   else {
     try {

@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
+    "@tanstack/react-query": "^4.29.23",
+    "@tanstack/react-query-devtools": "^4.29.23",
     "@threadsjs/threads.js": "^1.8.1",
     "@types/node": "20.4.1",
     "@types/react": "18.2.14",
@@ -26,6 +28,7 @@
     "postcss": "8.4.25",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-intersection-observer": "^9.5.2",
     "react-redux": "^8.1.1",
     "react-scroll-to-top": "^3.0.0",
     "react-time-ago": "^7.2.1",

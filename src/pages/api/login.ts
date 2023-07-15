@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from '@threadsjs/threads.js';
+import { setTimeout } from 'timers/promises';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
@@ -7,9 +8,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   
   let payload: any = {};
 
-  if (fs.existsSync('./login.json')) {
+  if (fs.existsSync('./json/login.json')) {
     console.log('sent test login');
-    payload = JSON.parse(fs.readFileSync('./login.json', 'utf8'));
+    payload = JSON.parse(fs.readFileSync('./json/login.json', 'utf8'));
+    await setTimeout(1000);
   }
   else {
     try {
