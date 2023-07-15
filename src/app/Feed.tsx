@@ -29,15 +29,12 @@ export default function Feed(props: any) {
 
   const fetcher = useFetcher();
 
-  const x = useInfiniteQuery([], async ({ pageParam = null }) => {},{} as any);
-
   const {
     status,
     data,
     error,
     fetchNextPage,
     refetch,
-    a,
   } = useInfiniteQuery(
     ['feed', { user_id: user_id, post_id: post_id }],
     async ({ pageParam = null }) => {
@@ -101,17 +98,17 @@ export default function Feed(props: any) {
   )
 
   const addPost = (item: any) => {
-    const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
-    setItems(prevItems => [newPost, ...prevItems])
-    let newFeed = JSON.parse(JSON.stringify(prevFeed));
+    // const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
+    // setItems(prevItems => [newPost, ...prevItems])
+    // let newFeed = JSON.parse(JSON.stringify(prevFeed));
 
-    console.log([threadData, item]);
-    newFeed.items = [{
-      threaded_items: [threadData, item],
-      posts: [threadData, item]
-    },
-    ...prevFeed.items];
-    dispatch(setFeed(newFeed));
+    // console.log([threadData, item]);
+    // newFeed.items = [{
+    //   threaded_items: [threadData, item],
+    //   posts: [threadData, item]
+    // },
+    // ...prevFeed.items];
+    // dispatch(setFeed(newFeed));
   }
 
   // useEffect(() => {
