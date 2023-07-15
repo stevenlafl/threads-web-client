@@ -33,6 +33,7 @@ export default function Feed(props: any) {
     status,
     data,
     error,
+    hasNextPage,
     fetchNextPage,
     refetch,
   } = useInfiniteQuery(
@@ -167,7 +168,7 @@ export default function Feed(props: any) {
         />
 
         <InView as="div" initialInView onChange={inView => {
-          if (inView) {
+          if (inView && hasNextPage) {
             fetchNextPage({
               pageParam: null,
             })
