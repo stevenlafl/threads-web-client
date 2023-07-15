@@ -7,6 +7,7 @@ import { selectFeed, selectLastFeed, setFeed, setLastFeed } from '@/store/prevSl
 import { useDispatch, useSelector } from 'react-redux';
 import { useRouter } from 'next/navigation';
 import ScrollToTop from 'react-scroll-to-top';
+import useFetcher from '@/hooks/useFetcher';
 
 export default function Feed(props: any) {
   const token = props.token;
@@ -32,6 +33,8 @@ export default function Feed(props: any) {
   const prevFeed = useSelector(selectFeed);
   const lastPrevFeed = useSelector(selectLastFeed);
 
+  const fetcher = useFetcher();
+
   const handleScroll = () => {
     if (window.innerHeight + document.documentElement.scrollTop < document.documentElement.offsetHeight || isLoading) {
       return;
@@ -53,34 +56,17 @@ export default function Feed(props: any) {
       let data = {} as any;
 
       if (user_id) {
-        const response = await fetch('/api/feed/' + user_id, {
-          method: 'POST',
-          body: JSON.stringify({
-            token: token,
-            max_id: nextMaxId
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        data = await response.json();
+        data = await fetcher('/api/feed/' + user_id, {
+          max_id: nextMaxId
+        });
         data.items = data.threads;
 
         setNextMaxId(data.next_max_id);
       }
       else if (post_id) {
-        const response = await fetch('/api/post/' + post_id, {
-          method: 'POST',
-          body: JSON.stringify({
-            token: token,
-            max_id: nextMaxId
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        data = await response.json();
-
+        data = await fetcher('/api/post/' + post_id, {
+          max_id: nextMaxId
+        });
         data.items = data.reply_threads;
 
         setThreadData(data.containing_thread.thread_items[data.containing_thread.thread_items.length - 1].post);
@@ -99,17 +85,9 @@ export default function Feed(props: any) {
         // Grab a new feed if it'd been long enough.
         // Always attempt to paginate.
         if (!prevFeed || fetchPrevFeed || nextMaxId) {
-          const response = await fetch('/api/feed', {
-            method: 'POST',
-            body: JSON.stringify({
-              token: token,
-              max_id: nextMaxId
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          })
-          data = await response.json();
+          data = await fetcher('/api/feed', {
+            max_id: nextMaxId
+          });
 
           // We're fetching the main /api/feed and not /api/post/xxx, so it's
           // the main feed. Only cache the first page.

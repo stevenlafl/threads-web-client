@@ -1,6 +1,7 @@
 "use client";
 
 import useAutosizeTextArea from '@/hooks/useAutosizeTextArea';
+import useFetcher from '@/hooks/useFetcher';
 import EmojiPicker, { EmojiStyle, Theme } from 'emoji-picker-react';
 import { useEffect, useRef, useState } from 'react';
 
@@ -17,6 +18,8 @@ export default function LoginForm(props: any) {
   const token = props.token;
   const post_id = props.post_id;
   const addPost: any = props.addPost;
+
+  const fetcher = useFetcher();
 
   async function onEmojiClick(emojiObject: any, event: any) {
     console.log(emojiObject);
@@ -39,29 +42,15 @@ export default function LoginForm(props: any) {
     let response = {} as any;
 
     if (post_id) {
-      response = await fetch('/api/reply', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          post_id: post_id,
-          text: e.target.text.value,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      response = await fetcher('/api/reply', {
+        post_id: post_id,
+        text: e.target.text.value,
+      });
     }
     else {
-      response = await fetch('/api/post', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          text: e.target.text.value,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      response = await fetcher('/api/post', {
+        text: e.target.text.value,
+      });
     }
 
     addPost(response.media);

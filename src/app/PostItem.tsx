@@ -1,5 +1,6 @@
 "use client";
 
+import useFetcher from '@/hooks/useFetcher';
 import { setCookie } from 'cookies-next';
 import Image from 'next/image'
 import Link from 'next/link';
@@ -54,37 +55,25 @@ export default function PostItem(props: any) {
   );
   const [likeCount, setLikeCount] = useState(post.like_count);
 
+  const fetcher = useFetcher();
+
   async function likePost(e: any) {
     e.preventDefault();
 
     let response: any = null;
     if (liked) {
-       response = await fetch('/api/unlike', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          post_id: id,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      response = await fetcher('/api/unlike', {
+        post_id: id,
+      });
       if (response.status === 'ok') {
         setLiked(false);
         setLikeCount(likeCount - 1);
       }
     }
     else {
-      response = await fetch('/api/like', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          post_id: id,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      response = await fetcher('/api/like', {
+        post_id: id,
+      });
 
       if (response.status === 'ok') {
         setLiked(true);
@@ -98,32 +87,18 @@ export default function PostItem(props: any) {
 
     let response: any = null;
     if (hasReposted) {
-      response = await fetch('/api/unrepost', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
+      response = await fetcher('/api/unrepost', {
           post_id: id,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      });
 
       if (response.status === 'ok') {
         setHasReposted(false);
       }
     }
     else {
-      response = await fetch('/api/repost', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          post_id: id,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      response = await fetcher('/api/repost', {
+        post_id: id,
+      });
 
       if (response.status === 'ok') {
         setHasReposted(true);

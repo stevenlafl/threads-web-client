@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image'
+import useFetcher from '@/hooks/useFetcher';
 
 export default function UserItem(props: any) {
   const token = props.token;
@@ -22,19 +23,14 @@ export default function UserItem(props: any) {
 
   //console.log(user);
 
+  const fetcher = useFetcher();
+
   async function followAction(e: any) {
     e.preventDefault();
     try {
-      const response = await fetch('/api/' + (isFollowing ? 'un' : '') + 'follow', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          user_id: user.pk,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      const response = await fetcher('/api/' + (isFollowing ? 'un' : '') + 'follow', {
+        user_id: user.pk,
+      });
       if (response.status === 'ok') {
         setFollowing(!isFollowing);
       }
@@ -46,16 +42,9 @@ export default function UserItem(props: any) {
   async function muteAction(e: any) {
     e.preventDefault();
     try {
-      const response = await fetch('/api/' + (isMuting ? 'un' : '') + 'mute', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          user_id: user.pk,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      const response = await fetcher('/api/' + (isMuting ? 'un' : '') + 'mute', {
+        user_id: user.pk,
+      });
       if (response.status === 'ok') {
         setMuting(!isMuting);
       }
@@ -67,16 +56,9 @@ export default function UserItem(props: any) {
   async function blockAction(e: any) {
     e.preventDefault();
     try {
-      const response = await fetch('/api/' + (isBlocking ? 'un' : '') + 'block', {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-          user_id: user.pk,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      }).then((res) => res.json());
+      const response = await fetcher('/api/' + (isBlocking ? 'un' : '') + 'block', {
+        user_id: user.pk,
+      });
       if (response.status === 'ok') {
         setBlocking(!isBlocking);
       }

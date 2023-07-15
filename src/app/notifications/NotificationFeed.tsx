@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import NotificationItem from './NotificationItem';
 import { selectLastNotifications, selectNotifications, setNotifications, setLastNotifications } from '@/store/notificationSlice';
+import useFetcher from '@/hooks/useFetcher';
 
 export default function Page(props: any) {
 
@@ -20,6 +21,8 @@ export default function Page(props: any) {
   const [isLoading, setIsLoading] = useState(false);
   const [items, setItems] = useState([] as JSX.Element[]);
 
+  const fetcher = useFetcher();
+
   const fetchData = async () => {
 
     if (isLoading) return;
@@ -32,28 +35,13 @@ export default function Page(props: any) {
 
       let response = {} as any;
       if (!feed || fetchFeed || nextMaxId) {
-        response = await fetch('/api/notifications', {
-          method: 'POST',
-          body: JSON.stringify({
-            token: token,
-            max_id: nextMaxId,
-            firstRecordTime: firstRecordTime
-          }),
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(res => res.json());
+        response = await fetcher('/api/notifications', {
+          max_id: nextMaxId,
+          firstRecordTime: firstRecordTime
+        });
 
         if (response.new_stories.length > 0) {
-          await fetch('/api/clearnotifications', {
-            method: 'POST',
-            body: JSON.stringify({
-              token: token,
-            }),
-            headers: {
-              'Content-Type': 'application/json'
-            }
-          });
+          await fetcher('/api/clearnotifications');
         }
 
         // Clone

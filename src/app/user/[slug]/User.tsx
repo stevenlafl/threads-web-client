@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import UserItem from './UserItem';
 import Feed from '@/app/Feed';
+import useFetcher from '@/hooks/useFetcher';
 
 export default function User(props: any) {
-  const token = props.token;
   const user_id = props.user_id;
   const my_user_id = props.my_user_id;
 
@@ -19,6 +19,8 @@ export default function User(props: any) {
   
   const [feedLoaded, setFeedLoaded] = useState(false);
 
+  const fetcher = useFetcher();
+  
   const fetchData = async () => {
 
     if (isLoading) return;
@@ -26,16 +28,7 @@ export default function User(props: any) {
     setIsLoading(true);
     
     try {
-      const response = await fetch('/api/user/' + user_id, {
-        method: 'POST',
-        body: JSON.stringify({
-          token: token,
-        }),
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      const data = await response.json();
+      const data = await fetcher('/api/user/' + user_id);
 
       setUser(data.user);
     } catch (error) {
@@ -53,8 +46,8 @@ export default function User(props: any) {
   }, []);
   return (
     <>
-      <UserItem token={token} user={user} my_user_id={my_user_id} following={isFollowing} muting={isMuting} blocking={isBlocking} feedLoaded={feedLoaded} setFollowing={setIsFollowing} setMuting={setIsMuting} setBlocking={setIsBlocking} />
-      <Feed token={token} user_id={user_id} setFollowing={setIsFollowing} setMuting={setIsMuting} setBlocking={setIsBlocking} setFeedLoaded={setFeedLoaded} />
+      <UserItem user={user} my_user_id={my_user_id} following={isFollowing} muting={isMuting} blocking={isBlocking} feedLoaded={feedLoaded} setFollowing={setIsFollowing} setMuting={setIsMuting} setBlocking={setIsBlocking} />
+      <Feed user_id={user_id} setFollowing={setIsFollowing} setMuting={setIsMuting} setBlocking={setIsBlocking} setFeedLoaded={setFeedLoaded} />
     </>
   )
 }
