@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import FeedItem from './FeedItem';
 import PostForm from './PostForm';
 import { selectFeed, selectLastFeed, setFeed, setLastFeed } from '@/store/prevSlice';
@@ -23,9 +23,7 @@ export default function Feed(props: any) {
   const setBlocking = props.setBlocking;
   const setFeedLoaded = props.setFeedLoaded;
 
-  const [thread, setThread] = useState(<></> as JSX.Element);
-  const [threadData, setThreadData] = useState([] as any[]);
-  const [items, setItems] = useState([] as JSX.Element[]);
+  const [threadData, setThreadData] = useState({} as any);
 
   const fetcher = useFetcher();
 
@@ -54,14 +52,6 @@ export default function Feed(props: any) {
         });
         apiData.items = apiData.reply_threads;
 
-        setThreadData(apiData.containing_thread.thread_items[apiData.containing_thread.thread_items.length - 1].post);
-
-        if (apiData.containing_thread) {
-          setThread(
-            <FeedItem key={apiData.containing_thread.id} token={token} item={apiData.containing_thread} />
-          )
-        }
-
         apiData.nextPage = apiData.paging_tokens.downwards;
       }
       else {
@@ -70,21 +60,6 @@ export default function Feed(props: any) {
         });
         
         apiData.nextPage = apiData.next_max_id;
-      }
-
-      for (let item of apiData.items) {
-        for (const post of item.posts) {
-          if (user_id && post.user.pk == user_id && post.user.friendship_status) {
-            setFollowing(post.user.friendship_status.following);
-            setMuting(post.user.friendship_status.muting);
-            setBlocking(post.user.friendship_status.blocking);
-            break;
-          }
-        }
-      }
-
-      if (setFeedLoaded) {
-        setFeedLoaded(true);
       }
 
       return apiData;
@@ -97,6 +72,32 @@ export default function Feed(props: any) {
       staleTime: 1000 * 60 * 4, // 4 minutes
     },
   )
+
+  useEffect( () => {
+    if (status == 'success') {
+      for (let page of data?.pages) {
+
+        if (post_id && page.containing_thread) {
+          setThreadData(page);
+        }
+
+        for (let item of page.items) {
+          for (const post of item.posts) {
+            if (user_id && post.user.pk == user_id && post.user.friendship_status) {
+              setFollowing(post.user.friendship_status.following);
+              setMuting(post.user.friendship_status.muting);
+              setBlocking(post.user.friendship_status.blocking);
+              break;
+            }
+          }
+        }
+      }
+
+      if (setFeedLoaded) {
+        setFeedLoaded(true);
+      }
+    }
+  }, [status]);
 
   const addPost = (item: any) => {
     // const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
@@ -125,7 +126,9 @@ export default function Feed(props: any) {
     <>
       {(post_id) &&
         <div>
-          {thread}
+          { (status === 'success') &&
+              <FeedItem key={threadData.containing_thread.id} token={token} item={threadData.containing_thread} />
+          }
         </div>
       }
       <div>

@@ -18,8 +18,6 @@ export default function Page({ params }: { params: { slug: string } }) {
 
   const user_id = params.slug;
 
-  console.log('test');
-
   if (loggedIn ) {
     return (
       <>
