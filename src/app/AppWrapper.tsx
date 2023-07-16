@@ -4,7 +4,7 @@ import { Link } from "nextjs13-router-events";
 import LogoutButton from "./LogoutButton";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
 
 import TimeAgo from 'javascript-time-ago'
@@ -26,6 +26,7 @@ export default function AppWrapper({
 }) {
   
   const pathname = usePathname()
+  const router = useRouter();
 
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
@@ -36,6 +37,18 @@ export default function AppWrapper({
   const [isBlocked, setIsBlocked] = useState(false);
 
   const fetcher = useFetcher();
+  
+  // Textbox related
+  const [message, setMessage] = useState('');
+  const [updated, setUpdated] = useState('');
+  const handleChange = (event: any) => {
+    setMessage(event.target.value);
+  };
+  const handleKeyDown = (event: any) => {
+    if (event.key === 'Enter') {
+      router.push(`/search?query=${message}`);
+    }
+  };
 
   useRouteChange({
     onRouteChangeStart: () => {
@@ -223,6 +236,9 @@ export default function AppWrapper({
                   name="search"
                   placeholder="Search Threads"
                   className="bg-[#343638] h-10 px-10 pr-5 w-full rounded-full text-sm focus:outline-none bg-purple-white shadow border-0"
+                  value={message}
+                  onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                 />
               </div>
 
@@ -244,7 +260,11 @@ export default function AppWrapper({
                 <hr className="border-bg-[#343638]" />
 
                 {/* <!--first person who to follow-->  */}
-                { (recommendStatus === 'success') &&
+                {recommendStatus === 'loading' ? (
+                  <p className="text-white text-center">Loading...</p>
+                ) : recommendStatus === 'error' ? (
+                  <span className="text-white">Error: {(recommendError as any).message}</span>
+                ) : (
                   <>
                     { recommended.users.slice(0,8).map((user: any) => (
                       <div className="text-white rounded-md p-1 m-1 hover:bg-[#343638] clear-both overflow-hidden">
@@ -264,7 +284,7 @@ export default function AppWrapper({
                     ))}
                     <hr className="border-gray-600" />
                   </>
-                }
+                )}
 
                 {/*
                 <div className="flex">
@@ -277,7 +297,11 @@ export default function AppWrapper({
                 */}
               </div>
 
-              { (versionStatus === 'success') &&
+              {versionStatus === 'loading' ? (
+                <p className="text-white text-center">Loading...</p>
+              ) : versionStatus === 'error' ? (
+                <span className="text-white">Error: {(versionError as any).message}</span>
+              ) : (
                 <div className="flow-root text-center inline pt-4">
                   <div className="flex-2">
                     <div className="text-sm leading-6 font-medium text-gray-600">
@@ -292,7 +316,7 @@ export default function AppWrapper({
                     </div>
                   </div>
                 </div>
-              }
+              )}
             </div>
           </div>
         </div>

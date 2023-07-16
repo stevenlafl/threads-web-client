@@ -1,6 +1,6 @@
 "use client";
 
-import NotificationItem from './NotificationItem';
+import SearchItem from './SearchItem';
 
 import useFetcher from '@/hooks/useFetcher';
 import {
@@ -9,10 +9,10 @@ import {
 import useInfiniteScroll from '@/hooks/useInfiniteScroll';
 import { useRouteChange } from 'nextjs13-router-events';
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 
 export default function Page(props: any) {
-
-  let token = props.token;
+  const searchParams = useSearchParams()
 
   const fetcher = useFetcher();
   const [isBlocked, setIsBlocked] = useState(false);
@@ -41,63 +41,17 @@ export default function Page(props: any) {
     fetchNextPage,
     refetch
   } = useInfiniteQuery(
-    ['notifications'],
-    async ({ pageParam = {
-      max_id: null,
-      firstRecordTime: null,
-    }}) => {
+    ['search', [ searchParams?.get('query') ]],
+    async ({ pageParam = null}) => {
 
-      if (pageParam == null) {
-        pageParam = {
-          max_id: null,
-          firstRecordTime: null,
-        }
-      }
-      const response = await fetcher('/api/notifications', {
-        max_id: pageParam.max_id,
-        firstRecordTime: pageParam.firstRecordTime
+      return await fetcher('/api/search', {
+        query: searchParams?.get('query'),
+        count: pageParam,
       });
-
-      if (response.new_stories.length > 0) {
-        await fetcher('/api/clearnotifications');
-      }
-      
-      const newItems: {
-        items: any[],
-        nextPage: string | null,
-        firstRecordTime: number | null
-      } = {
-        items: [],
-        nextPage: null,
-        firstRecordTime: null,
-      };
-
-      for (let item of response.new_stories) {
-        item.new = true;
-        newItems.items.push(item);
-      }
-
-      for (let item of response.old_stories) {
-        item.new = false;
-        newItems.items.push(item);
-      }
-
-      console.log(newItems);
-
-      return newItems;
     },
     {
       getNextPageParam: (lastPage) => {
         return false;
-
-        // if (lastPage.nextPage === null) {
-        //   return false;
-        // }
-
-        // return {
-        //   max_id: lastPage.nextPage,
-        //   firstRecordTime: firstRecordTime,
-        // };
       },
       keepPreviousData: true,
     },
@@ -121,8 +75,8 @@ export default function Page(props: any) {
           <>
             { data?.pages.map((page: any, i) => (
               <>
-                {page?.items.map((item: any) => (
-                  <NotificationItem key={item.pk} item={item} new={item.new} />
+                {page?.users.map((item: any) => (
+                  <SearchItem key={item.pk} item={item} />
                 ))}
               </>
             ))}
