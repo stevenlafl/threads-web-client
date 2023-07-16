@@ -1,12 +1,9 @@
 "use client"
 
-import type { Metadata } from "next";
-import PostForm from "./PostForm";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import Head from "next/head";
-import { getCookie } from 'cookies-next';
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
@@ -16,22 +13,12 @@ TimeAgo.addDefaultLocale(en)
 // Redux
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAuthState, selectToken, selectUserId, selectUserName, setAuthState } from "../store/authSlice";
-import { selectLastVersion, selectVersion, setLastVersion, setVersion } from "@/store/prevSlice";
 
 export default function AppWrapper({
   children,
 }: {
   children: React.ReactNode;
 }) {
-
-  const dispatch = useDispatch();
-  
-  const [versionData, setVersionData] = useState({current: 0, last: 0, update: false});
-  const version = useSelector(selectVersion);
-  const lastVersion = useSelector(selectLastVersion);
-
-  const [isLoading, setIsLoading] = useState(false);
-  const [isFirstLoad, setIsFirstLoad] = useState(true);
 
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
@@ -64,48 +51,16 @@ export default function AppWrapper({
   window.addEventListener('replaceState', setCurrentPage);
   window.addEventListener('pushState', setCurrentPage);
 
-  const fetchData = async () => {
-    if (isLoading) return;
-    setIsLoading(true);
-    
-    try {
-      
-      console.log('fetching version');
-      const fetchVersion = !version || ((Date.now()/1000) - lastVersion) > 60*5;
-
-      let data = {} as typeof versionData;
-      if (fetchVersion) {
-        data = await fetch('/api/version', {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        }).then(res => res.json());
-
-        dispatch(setVersion(data));
-        dispatch(setLastVersion(Date.now()/1000));
-      }
-      else {
-        data = version;
-      }
-
-      console.log(data);
-
-      setVersionData(data);
-
-    } catch(e) {
-      console.error(e);
-    } finally {
-      setIsLoading(false);
-    }
-  }
-
-  useEffect(() => {
-    if (isFirstLoad) {
-      setIsFirstLoad(false);
-      setCurrentPage();
-      fetchData();
-    }
-  })
+  const {data: version, status, error} = useQuery(
+    ['version'],
+    async () => {
+      return await fetch('/api/version', {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      }).then(res => res.json());
+    },
+  );
 
   if (loggedIn && token) {
     const profileURL = `/user/${userId}`;

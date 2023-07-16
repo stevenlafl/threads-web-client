@@ -32,6 +32,13 @@ export default function Page(props: any) {
       max_id: null,
       firstRecordTime: null,
     }}) => {
+
+      if (pageParam == null) {
+        pageParam = {
+          max_id: null,
+          firstRecordTime: null,
+        }
+      }
       const response = await fetcher('/api/notifications', {
         max_id: pageParam.max_id,
         firstRecordTime: pageParam.firstRecordTime
@@ -87,8 +94,6 @@ export default function Page(props: any) {
         // };
       },
       keepPreviousData: true,
-      cacheTime: 1000 * 60 * 5, // 5 minutes
-      staleTime: 1000 * 60 * 4, // 4 minutes
     },
   )
 
@@ -108,9 +113,9 @@ export default function Page(props: any) {
           <span className="text-white">Error: {(error as any).message}</span>
         ) : (
           <>
-            { data?.pages.map((page, i) => (
+            { data?.pages.map((page: any, i) => (
               <>
-                {page.items.map((item: any) => (
+                {page?.items.map((item: any) => (
                   <NotificationItem key={item.pk} item={item} new={item.new} />
                 ))}
               </>
@@ -119,16 +124,18 @@ export default function Page(props: any) {
         )}
       </div>
 
-      <InView as="div" initialInView onChange={inView => {
-        if (inView && hasNextPage) {
-          fetchNextPage({
-            pageParam: {
-              max_id: null,
-              firstRecordTime: null,
-            },
-          })
-        }
-      }}/>
+      {status !== 'loading' && 
+        <InView as="div" onChange={inView => {
+          if (inView && hasNextPage) {
+            fetchNextPage({
+              pageParam: {
+                max_id: null,
+                firstRecordTime: null,
+              },
+            })
+          }
+        }}/>
+      }
     </>
   )
 }

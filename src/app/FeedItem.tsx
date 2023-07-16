@@ -11,8 +11,6 @@ import ReactTimeAgo from 'react-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
 import PostItem from './PostItem';
 
-TimeAgo.addDefaultLocale(en)
-
 export default function FeedItem(props: any) {
   const token = props.token;
   const posts = props.item.posts;

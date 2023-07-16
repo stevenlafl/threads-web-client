@@ -9,13 +9,23 @@ import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-quer
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistGate } from "redux-persist/integration/react";
 
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+
 const inter = Inter({ subsets: ["latin"] });
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false, // default: true
+      cacheTime: 1000 * 60 * 60, // 1 hour
+      staleTime: 1000 * 60 * 5 // 5 minutes
     },
   },
+})
+
+const asyncStoragePersister = createAsyncStoragePersister({
+  storage: AsyncStorage
 })
 
 export default function RootLayout({
@@ -37,12 +47,12 @@ export default function RootLayout({
       >
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <QueryClientProvider client={queryClient}>
+          <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: asyncStoragePersister }}>
             <AppWrapper>
               {children}
             </AppWrapper>
             <ReactQueryDevtools initialIsOpen={false} />
-          </QueryClientProvider>
+          </PersistQueryClientProvider>
         </PersistGate>
       </Provider>
       </body>

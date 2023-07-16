@@ -3,14 +3,13 @@
 import { useEffect, useState } from 'react';
 import FeedItem from './FeedItem';
 import PostForm from './PostForm';
-import { selectFeed, selectLastFeed, setFeed, setLastFeed } from '@/store/prevSlice';
-import { useDispatch, useSelector } from 'react-redux';
 import ScrollToTop from 'react-scroll-to-top';
 
 import useFetcher from '@/hooks/useFetcher';
 import { InView } from 'react-intersection-observer'
 import {
   useInfiniteQuery,
+  useQueryClient,
 } from '@tanstack/react-query'
 
 export default function Feed(props: any) {
@@ -23,8 +22,9 @@ export default function Feed(props: any) {
   const setBlocking = props.setBlocking;
   const setFeedLoaded = props.setFeedLoaded;
 
-  const [threadData, setThreadData] = useState({} as any);
+  const [threadData, setThreadData] = useState(null as any);
 
+  const queryClient = useQueryClient()
   const fetcher = useFetcher();
 
   const {
@@ -34,6 +34,7 @@ export default function Feed(props: any) {
     hasNextPage,
     fetchNextPage,
     refetch,
+    remove,
   } = useInfiniteQuery(
     ['feed', { user_id: user_id, post_id: post_id }],
     async ({ pageParam = null }) => {
@@ -68,8 +69,6 @@ export default function Feed(props: any) {
       getPreviousPageParam: (firstPage) => null,
       getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
       keepPreviousData: true,
-      cacheTime: 1000 * 60 * 5, // 5 minutes
-      staleTime: 1000 * 60 * 4, // 4 minutes
     },
   )
 
@@ -99,7 +98,8 @@ export default function Feed(props: any) {
     }
   }, [status]);
 
-  const addPost = (item: any) => {
+  const addPost = (newPost: any) => {
+
     // const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
     // setItems(prevItems => [newPost, ...prevItems])
     // let newFeed = JSON.parse(JSON.stringify(prevFeed));
@@ -111,6 +111,38 @@ export default function Feed(props: any) {
     // },
     // ...prevFeed.items];
     // dispatch(setFeed(newFeed));
+
+    // Create a query key based on your existing key
+    const queryKey = ['feed', { user_id: user_id, post_id: post_id }];
+
+    // Use the setQueryData method to manipulate & update the data
+    queryClient.setQueryData(queryKey, (oldData: any) => {
+      // We will add the newPost into the first page 
+      // (you may need to adjust this based on your needs).
+      let updatedData = JSON.parse(JSON.stringify(oldData));
+
+      // Add check if pages exist 
+      if (updatedData.pages) {
+
+        if (threadData) {
+          // Make sure newPost gets added on the top of the list in page 1
+          updatedData.pages[0].items.unshift({
+            threaded_items: [threadData, newPost],
+            posts: [threadData, newPost]
+          });
+        }
+        else {
+          updatedData.pages[0].items.unshift({
+            threaded_items: [newPost],
+            posts: [newPost]
+          });
+        }
+      }
+
+      console.log(updatedData);
+
+      return updatedData;
+    })
   }
 
   // useEffect(() => {
@@ -138,9 +170,12 @@ export default function Feed(props: any) {
         <hr className="border-b-gray-800" />
       </div>
       {(!post_id) &&
-        <button className="text-white float-right" onClick={() => refetch({
-          refetchPage: (_: any, index: any) => index === 0,
-        })}>
+        <button className="text-white float-right" onClick={() => {
+          remove();
+          refetch({
+            refetchPage: (_: any, index: any) => index === 0,
+          });
+        }}>
           <svg className="h-10 w-10 text-white mr-5 mt-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
@@ -170,13 +205,15 @@ export default function Feed(props: any) {
           className='scroll-to-top flex items-center justify-center'
         />
 
-        <InView as="div" initialInView onChange={inView => {
-          if (inView && hasNextPage) {
-            fetchNextPage({
-              pageParam: null,
-            })
-          }
-        }}/>
+        {status !== 'loading' && 
+          <InView as="div" initialInView onChange={inView => {
+            if (inView && hasNextPage) {
+              fetchNextPage({
+                pageParam: null,
+              })
+            }
+          }}/>
+        }
       </div>
     </>
   )

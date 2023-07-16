@@ -10,7 +10,7 @@ import { useQuery } from '@tanstack/react-query';
 export default function User(props: any) {
   const user_id = props.user_id;
   const my_user_id = props.my_user_id;
-  
+
   const [isFollowing, setIsFollowing] = useState(false);
   const [isMuting, setIsMuting] = useState(false);
   const [isBlocking, setIsBlocking] = useState(false);
@@ -23,7 +23,7 @@ export default function User(props: any) {
     ['user', user_id],
     async () => {
       return fetcher('/api/user/' + user_id);
-    }
+    },
   );
 
   return (
