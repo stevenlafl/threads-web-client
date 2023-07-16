@@ -1,7 +1,7 @@
 "use client";
 
 import Image from 'next/image'
-import Link from 'next/link';
+import { Link } from 'nextjs13-router-events';
 
 export default function NotificationItem(props: any) {
   const item = props.item;

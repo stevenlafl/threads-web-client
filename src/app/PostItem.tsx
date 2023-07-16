@@ -1,8 +1,8 @@
 "use client";
 
 import useFetcher from '@/hooks/useFetcher';
-import Image from 'next/image'
-import Link from 'next/link';
+import Image from 'next/image';
+import { Link } from 'nextjs13-router-events';
 import { useState } from 'react';
 
 import TimeAgo from 'react-timeago'

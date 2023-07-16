@@ -10,7 +10,8 @@ import {
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query'
-import useInfiniteScroll from '@/hooks/infiniteScroll';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useRouteChange } from 'nextjs13-router-events';
 
 export default function Feed(props: any) {
   const token = props.token;
@@ -23,12 +24,22 @@ export default function Feed(props: any) {
   const setFeedLoaded = props.setFeedLoaded;
 
   const [threadData, setThreadData] = useState(null as any);
+  const [isBlocked, setIsBlocked] = useState(false);
 
   const queryClient = useQueryClient()
   const fetcher = useFetcher();
 
+  useRouteChange({
+    onRouteChangeStart: () => {
+      setIsBlocked(true);
+    },
+    onRouteChangeComplete: () => {
+      setIsBlocked(false);
+    }
+  });
+
   useInfiniteScroll(() => {
-    if (status === 'success' && !isFetching && hasNextPage) {
+    if (status === 'success' && !isFetching && hasNextPage && !isBlocked) {
       fetchNextPage();
     }
   });

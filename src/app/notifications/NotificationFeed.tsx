@@ -6,16 +6,28 @@ import useFetcher from '@/hooks/useFetcher';
 import {
   useInfiniteQuery,
 } from '@tanstack/react-query'
-import useInfiniteScroll from '@/hooks/infiniteScroll';
+import useInfiniteScroll from '@/hooks/useInfiniteScroll';
+import { useRouteChange } from 'nextjs13-router-events';
+import { useState } from 'react';
 
 export default function Page(props: any) {
 
   let token = props.token;
 
   const fetcher = useFetcher();
+  const [isBlocked, setIsBlocked] = useState(false);
+
+  useRouteChange({
+    onRouteChangeStart: () => {
+      setIsBlocked(true);
+    },
+    onRouteChangeComplete: () => {
+      setIsBlocked(false);
+    }
+  });
 
   useInfiniteScroll(() => {
-    if (status === 'success' && !isFetching && hasNextPage) {
+    if (status === 'success' && !isFetching && hasNextPage && !isBlocked) {
       fetchNextPage();
     }
   });

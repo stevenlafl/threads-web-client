@@ -1,6 +1,6 @@
 "use client"
 
-import Link from "next/link";
+import { Link } from "nextjs13-router-events";
 import LogoutButton from "./LogoutButton";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";

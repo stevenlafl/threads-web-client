@@ -6,6 +6,7 @@ const useInfiniteScroll = (callback: () => void) => {
       return;
     }
 
+    console.log('scroll callback');
     callback();
   };
 

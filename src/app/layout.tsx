@@ -12,6 +12,7 @@ import { PersistGate } from "redux-persist/integration/react";
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { createAsyncStoragePersister } from '@tanstack/query-async-storage-persister'
+import { RouteChangeProvider } from 'nextjs13-router-events';
 
 const inter = Inter({ subsets: ["latin"] });
 const queryClient = new QueryClient({
@@ -48,9 +49,11 @@ export default function RootLayout({
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
           <PersistQueryClientProvider client={queryClient} persistOptions={{ persister: asyncStoragePersister }}>
-            <AppWrapper>
-              {children}
-            </AppWrapper>
+            <RouteChangeProvider>
+              <AppWrapper>
+                {children}
+              </AppWrapper>
+            </RouteChangeProvider>
             <ReactQueryDevtools initialIsOpen={false} />
           </PersistQueryClientProvider>
         </PersistGate>
