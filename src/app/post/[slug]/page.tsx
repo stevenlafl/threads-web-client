@@ -1,12 +1,6 @@
 "use client";
 
-import { cookies } from 'next/headers'
-import Link from 'next/link';
-import LoginForm from '../../LoginForm';
 import Feed from '@/app/Feed';
-import { Metadata } from 'next';
-import { useEffect, useState } from 'react';
-import { getCookie } from 'cookies-next';
 import { useSelector } from 'react-redux';
 import { selectAuthState, selectToken } from '@/store/authSlice';
 import SignUp from '@/app/SignUp';

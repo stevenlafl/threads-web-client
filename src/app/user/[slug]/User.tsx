@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import UserItem from './UserItem';
 import Feed from '@/app/Feed';
 import useFetcher from '@/hooks/useFetcher';

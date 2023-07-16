@@ -5,7 +5,7 @@ import { Inter } from "next/font/google";
 import AppWrapper from "./AppWrapper";
 import { Provider } from "react-redux";
 import { store, persistor } from "@/store";
-import { QueryClient, QueryClientProvider, useQuery } from '@tanstack/react-query'
+import { QueryClient } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistGate } from "redux-persist/integration/react";
 

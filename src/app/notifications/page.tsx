@@ -1,6 +1,5 @@
 "use client";
 
-import Feed from '@/app/Feed';
 import { useSelector } from 'react-redux';
 import { selectAuthState, selectToken } from '@/store/authSlice';
 import SignUp from '../SignUp';

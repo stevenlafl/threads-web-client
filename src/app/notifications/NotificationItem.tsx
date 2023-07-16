@@ -1,12 +1,7 @@
 "use client";
 
-import { setCookie } from 'cookies-next';
 import Image from 'next/image'
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-
-import ReactTimeAgo from 'react-time-ago'
 
 export default function NotificationItem(props: any) {
   const item = props.item;

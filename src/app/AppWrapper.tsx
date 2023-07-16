@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
 import TimeAgo from 'javascript-time-ago'

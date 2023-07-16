@@ -1,13 +1,9 @@
 "use client";
 
-import Link from "next/link";
 import LoginForm from "./LoginForm";
 import Feed from "@/app/Feed";
-import { Metadata } from "next";
-import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { selectAuthState, selectToken } from "@/store/authSlice";
-import { getCookie } from "cookies-next";
 
 export default function Home() {
   const token = useSelector(selectToken);

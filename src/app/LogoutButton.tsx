@@ -1,9 +1,6 @@
 "use client";
 
-import { selectAuthState, setAuthState } from '@/store/authSlice';
-import { deleteCookie } from 'cookies-next';
-import Image from 'next/image'
-import Link from 'next/link';
+import { setAuthState } from '@/store/authSlice';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 
