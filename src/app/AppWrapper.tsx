@@ -65,7 +65,8 @@ export default function AppWrapper({
       return fetcher('/api/recommended');
     },
     {
-      staleTime: 1000 * 60 * 30 // 30 minutes
+      staleTime: 1000 * 60 * 30, // 30 minutes
+      enabled: (!!loggedIn && !!token)
     }
   );
 
@@ -266,7 +267,7 @@ export default function AppWrapper({
                   <span className="text-white">Error: {(recommendError as any).message}</span>
                 ) : (
                   <>
-                    { recommended.users.slice(0,8).map((user: any) => (
+                    { recommended.users?.slice(0,8).map((user: any) => (
                       <div className="text-white rounded-md p-1 m-1 hover:bg-[#343638] clear-both overflow-hidden" key={user.pk}>
                         <div>
                           <Link href={"/user/" + user.pk}>
