@@ -24,6 +24,9 @@ export default function User(props: any) {
     async () => {
       return fetcher('/api/user/' + user_id);
     },
+    {
+      staleTime: 1000 * 60 * 30 // 30 minutes
+    }
   );
 
   return (
