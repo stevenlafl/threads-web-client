@@ -276,9 +276,9 @@
     "@tanstack/query-core" "4.29.23"
     use-sync-external-store "^1.2.0"
 
-"@threadsjs/threads.js@^1.8.1":
+"@threadsjs/threads.js@1.8.1":
   version "1.8.1"
-  resolved "https://registry.npmjs.org/@threadsjs/threads.js/-/threads.js-1.8.1.tgz"
+  resolved "https://registry.yarnpkg.com/@threadsjs/threads.js/-/threads.js-1.8.1.tgz#4eaea6661f3755aeebb5cd4479707ec3767b4bdb"
   integrity sha512-RqzxXb5L3+XkethXOgD7ssExpJxmjTnUbSj4MeZbeGN4SKEJ0KuTBHHOoNVe89Vj5PZzocalnWZmDQY+j0zVyA==
   dependencies:
     "@types/node" "^20.4.1"

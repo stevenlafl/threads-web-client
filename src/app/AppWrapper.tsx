@@ -96,7 +96,7 @@ export default function AppWrapper({
     },
   );
 
-  if (loggedIn && token) {
+  if (loggedIn) {
     const profileURL = `/user/${userId}`;
 
     return (

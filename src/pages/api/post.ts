@@ -16,6 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   else {
     try {
       const client = new Client({ token });
+      
       payload = await client.posts.create(my_user_id, {contents: text})
     } catch (e: any) {
       payload['error'] = e.message;

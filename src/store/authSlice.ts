@@ -6,6 +6,7 @@ import { AppStore } from "./appStore";
 // Type for our state
 export interface AuthState {
   authState: boolean;
+  challengeRequired: boolean;
   token: string | null;
   userId: string | null;
   userName: string | null;
@@ -14,6 +15,7 @@ export interface AuthState {
 // Initial state
 const initialState: AuthState = {
   authState: false,
+  challengeRequired: false,
   token: null,
   userId: null,
   userName: null,
@@ -36,6 +38,9 @@ export const authSlice = createSlice({
     },
     setUserName(state, action) {
       state.userName = action.payload;
+    },
+    setChallengeRequired(state, action) {
+      state.challengeRequired = action.payload;
     }
   },
 
@@ -59,9 +64,11 @@ export const {
   setToken,
   setUserId,
   setUserName,
+  setChallengeRequired,
 } = authSlice.actions;
 
 export const selectAuthState = (state: AppStore) => state.auth.authState;
+export const selectChallengeRequired = (state: AppStore) => state.auth.challengeRequired;
 export const selectToken = (state: AppStore) => state.auth.token;
 export const selectUserId = (state: AppStore) => state.auth.userId;
 export const selectUserName = (state: AppStore) => state.auth.userName;

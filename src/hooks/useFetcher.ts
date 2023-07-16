@@ -1,10 +1,14 @@
 // @see: https://medium.com/@oherterich/creating-a-textarea-with-dynamic-height-using-react-and-typescript-5ed2d78d9848
 
-import { selectAuthState, selectToken, selectUserId } from "@/store/authSlice";
-import { useSelector } from "react-redux";
+import { selectAuthState, selectToken, selectUserId, setAuthState, setChallengeRequired } from "@/store/authSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Updates the height of a <textarea> when the value changes.
 const useFetcher = () => {
+
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
 
   const isLoggedIn = useSelector(selectAuthState);
   const token = useSelector(selectToken);
@@ -27,7 +31,12 @@ const useFetcher = () => {
       }
     }).then(res => res.json());
 
-    if (response.message == 'login_required') {
+    if (response.message == 'challenge_required') {
+      dispatch(setChallengeRequired(true));
+      dispatch(setAuthState(false))
+      queryClient.clear();
+    }
+    else if (response.message == 'login_required') {
       window.localStorage.clear();
       window.location.reload();
     }
