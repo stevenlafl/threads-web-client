@@ -103,7 +103,7 @@ export default function Feed(props: any) {
         setFeedLoaded(true);
       }
     }
-  }, [status]);
+  }, [status, post_id, data, setBlocking, setFeedLoaded, setFollowing, setMuting, user_id]);
 
   const addPost = (newPost: any) => {
 

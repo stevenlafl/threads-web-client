@@ -10,7 +10,7 @@ export const config = {
 	},
 }
 
-export default (req: NextRequest, res: NextResponse) => {
+export default async function handler(req: NextRequest, res: NextResponse) {
 	return new Promise((resolve: any, reject: any) => {
 
 		const url = new URL(decodeURIComponent(req.url.replace('/api/video/', '')));
