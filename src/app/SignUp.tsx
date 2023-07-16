@@ -26,8 +26,8 @@ export default function SignUp() {
             Logo
           </h1>
           <p className="mt-4 text-sm text-center text-gray-700">
-            Please check your email and approve the challenge.<br />
-            Once this is complete, press the button below.
+            Please check your instagram account and approve/dismiss the challenge.<br />
+            Once this is complete, press the button below to try again.
             <br/><br/>
             <span className="text-center block">
               <button className="justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={continueAction}>
