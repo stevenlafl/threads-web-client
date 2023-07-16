@@ -1,17 +1,20 @@
 "use client";
 
+import { useQueryClient } from '@tanstack/react-query';
 import { setAuthState } from '@/store/authSlice';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 
 export default function LogoutButton() {
 
+  const queryClient = useQueryClient();
   const router = useRouter();
   const dispatch = useDispatch();
 
   async function handleSubmit(e: any) {
     e.preventDefault();
 
+    queryClient.clear();
     dispatch(setAuthState(false));
 
     router.refresh();

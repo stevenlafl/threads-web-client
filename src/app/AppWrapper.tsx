@@ -63,7 +63,6 @@ export default function AppWrapper({
       <div>
         <div className="flex max-w-screen-xl w-screen">
           <div className="w-1/5 text-white py-4 h-1/3 mr-10">
-          { onPage }
             <div className="fixed">
               {/* <!--left menu--> */}
               <svg
