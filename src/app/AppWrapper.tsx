@@ -12,8 +12,8 @@ import en from 'javascript-time-ago/locale/en.json'
 TimeAgo.addDefaultLocale(en)
 
 // Redux
-import { useSelector, useDispatch } from 'react-redux';
-import { selectAuthState, selectToken, selectUserId, selectUserName, setAuthState } from "../store/authSlice";
+import { useSelector } from 'react-redux';
+import { selectAuthState, selectToken, selectUserId, selectUserName } from "../store/authSlice";
 
 export default function AppWrapper({
   children,
@@ -29,13 +29,6 @@ export default function AppWrapper({
   const userName = useSelector(selectUserName);
 
   const [onPage, setOnPage] = useState('home');
-
-  const setCurrentPage = () => {
-    let matches = window.location.pathname.match(/^\/([^\/]*)/);
-    if (matches != null) {
-      setOnPage(matches[1] ? matches[1] : 'home');
-    }
-  }
 
   useEffect(() => {
     if (pathname) {
