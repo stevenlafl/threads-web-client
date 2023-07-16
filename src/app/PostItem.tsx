@@ -36,7 +36,7 @@ export default function PostItem(props: any) {
     post = post.text_post_app_info.share_info.reposted_post;
   }
 
-  let id = (post.id as string).split('_')[0];
+  let id = post?.id ? (post.id as string).split('_')[0] : null;
   let user = post.user;
 
   const images = (post.image_versions2 && post.image_versions2.candidates) ? post.image_versions2.candidates : [];
@@ -123,11 +123,11 @@ export default function PostItem(props: any) {
               {user.username} quoted
             </div>
           }
-          <Link href={"/user/" + (user.pk ? user.pk : '')}>
+          <Link href={"/user/" + (!!user?.pk ? user.pk : '')}>
             <div className="flex items-center">
               <div className="relative">
-                <Image className="inline-block h-10 w-10 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
-                { (post.user.friendship_status?.following) && 
+                <Image className="inline-block h-10 w-10 rounded-full" src={user?.profile_pic_url} width="100" height="100" alt="" />
+                { (post?.user?.friendship_status?.following) && 
                   <span className="text-white absolute -bottom-1 right-0">
                     <svg className="svg-icon w-4 y-5" viewBox="0 0 20 20">
                       <path fill="none" strokeWidth="3" stroke="black" d="M7.629,14.566c0.125,0.125,0.291,0.188,0.456,0.188c0.164,0,0.329-0.062,0.456-0.188l8.219-8.221c0.252-0.252,0.252-0.659,0-0.911c-0.252-0.252-0.659-0.252-0.911,0l-7.764,7.763L4.152,9.267c-0.252-0.251-0.66-0.251-0.911,0c-0.252,0.252-0.252,0.66,0,0.911L7.629,14.566z"></path>
@@ -138,15 +138,15 @@ export default function PostItem(props: any) {
               </div>
               <div className="ml-2">
                 <p className="text-base leading-6 font-medium text-white">
-                  {user.full_name}
-                  {user.is_verified && 
+                  {user?.full_name}
+                  {user?.is_verified && 
                     <svg className="inline-block -mt-0.5 ml-2" aria-label="Verified" color="rgb(0, 149, 246)" fill="rgb(0, 149, 246)" height="18" role="img" viewBox="0 0 40 40" width="18"><title>Verified</title><path d="M19.998 3.094 14.638 0l-2.972 5.15H5.432v6.354L0 14.64 3.094 20 0 25.359l5.432 3.137v5.905h5.975L14.638 40l5.36-3.094L25.358 40l3.232-5.6h6.162v-6.01L40 25.359 36.905 20 40 14.641l-5.248-3.03v-6.46h-6.419L25.358 0l-5.36 3.094Zm7.415 11.225 2.254 2.287-11.43 11.5-6.835-6.93 2.244-2.258 4.587 4.581 9.18-9.18Z" fillRule="evenodd"></path></svg>
                   }
                   <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
-                    @{user.username} - <TimeAgo date={date} />
+                    @{user?.username} - <TimeAgo date={date} />
                   </span>
                   <span className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150 pl-1">
-                    {(post.user.friendship_status?.followed_by) && 
+                    {(post?.user?.friendship_status?.followed_by) && 
                       <>( follows you )</>
                     }
                   </span>

@@ -95,7 +95,7 @@ export default function Feed(props: any) {
       for (let page of data?.pages) {
 
         if (post_id && page.containing_thread) {
-          setThreadData(page);
+          setThreadData(page.containing_thread);
         }
 
         for (let item of page.items) {
@@ -117,12 +117,12 @@ export default function Feed(props: any) {
   }, [status, post_id, data, setBlocking, setFeedLoaded, setFollowing, setMuting, user_id]);
 
   const addPost = (newPost: any) => {
-
-    // Create a query key based on your existing key
-    const queryKey = ['feed', { user_id: user_id, post_id: post_id }];
-
     // Use the setQueryData method to manipulate & update the data
-    queryClient.setQueryData(queryKey, (oldData: any) => {
+    queryClient.setQueryData(['feed', {}], (oldData: any) => {
+
+      if (!oldData) {
+        return;
+      }
       // We will add the newPost into the first page 
       // (you may need to adjust this based on your needs).
       let updatedData = JSON.parse(JSON.stringify(oldData));
@@ -131,15 +131,16 @@ export default function Feed(props: any) {
       if (updatedData.pages) {
 
         if (threadData) {
+          console.log('threadData', threadData, updatedData.pages[0].items);
           // Make sure newPost gets added on the top of the list in page 1
           updatedData.pages[0].items.unshift({
-            threaded_items: [threadData, newPost],
-            posts: [threadData, newPost]
+            thread_items: [threadData.thread_items[threadData.thread_items.length - 1].post, newPost],
+            posts: [threadData.thread_items[threadData.thread_items.length - 1].post, newPost]
           });
         }
         else {
           updatedData.pages[0].items.unshift({
-            threaded_items: [newPost],
+            thread_items: [newPost],
             posts: [newPost]
           });
         }
@@ -149,6 +150,27 @@ export default function Feed(props: any) {
 
       return updatedData;
     })
+    
+    if (post_id) {
+      queryClient.setQueryData(['feed', { user_id: user_id, post_id: post_id }], (oldData: any) => {
+        // We will add the newPost into the first page 
+        // (you may need to adjust this based on your needs).
+        let updatedData = JSON.parse(JSON.stringify(oldData));
+
+        // Add check if pages exist 
+        if (updatedData.pages) {
+
+          updatedData.pages[0].items.unshift({
+            thread_items: [newPost],
+            posts: [newPost]
+          });
+        }
+
+        console.log(updatedData);
+
+        return updatedData;
+      })
+    }
   }
 
   return (
@@ -156,7 +178,7 @@ export default function Feed(props: any) {
       {(post_id) &&
         <div>
           { (status === 'success' && threadData !== null) &&
-              <FeedItem key={threadData.containing_thread.id} token={token} item={threadData.containing_thread} />
+              <FeedItem key={threadData.id} token={token} item={threadData} />
           }
         </div>
       }
