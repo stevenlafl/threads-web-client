@@ -34,7 +34,7 @@ export default function NotificationItem(props: any) {
         <div>
           <Link href={"/user/" + profile_id}>
             <Image className="inline-block h-10 w-10 rounded-full" src={profile_image} width="100" height="100" alt="" />
-            <span className="inline-block pl-2">{username}</span>
+            <span className="inline-block pl-2">@{username}</span>
           </Link>
         </div>
         <div className="pl-12">

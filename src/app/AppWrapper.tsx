@@ -5,15 +5,19 @@ import LogoutButton from "./LogoutButton";
 import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
+
+import { useRouteChange } from 'nextjs13-router-events';
 
 TimeAgo.addDefaultLocale(en)
 
 // Redux
 import { useSelector } from 'react-redux';
 import { selectAuthState, selectToken, selectUserId, selectUserName } from "../store/authSlice";
+import useFetcher from "@/hooks/useFetcher";
 
 export default function AppWrapper({
   children,
@@ -29,6 +33,28 @@ export default function AppWrapper({
   const userName = useSelector(selectUserName);
 
   const [onPage, setOnPage] = useState('home');
+  const [isBlocked, setIsBlocked] = useState(false);
+
+  const fetcher = useFetcher();
+
+  useRouteChange({
+    onRouteChangeStart: () => {
+      setIsBlocked(true);
+    },
+    onRouteChangeComplete: () => {
+      setIsBlocked(false);
+    }
+  });
+
+  const {data: recommended, status: recommendStatus, error: recommendError, refetch: refetchRecommend} = useQuery(
+    ['recommended'],
+    async () => {
+      return fetcher('/api/recommended');
+    },
+    {
+      staleTime: 1000 * 60 * 30 // 30 minutes
+    }
+  );
 
   useEffect(() => {
     if (pathname) {
@@ -45,7 +71,7 @@ export default function AppWrapper({
     }
   }, [pathname]);
 
-  const {data: version, status, error} = useQuery(
+  const {data: version, status: versionStatus, error: versionError} = useQuery(
     ['version'],
     async () => {
       return await fetch('/api/version', {
@@ -207,38 +233,40 @@ export default function AppWrapper({
                     <h2 className="px-4 py-2 text-xl w-48 font-semibold text-white">
                       Who to follow
                     </h2>
+                    <button className="text-white float-right -mt-14 relative z-10" onClick={() => refetchRecommend()}>
+                      <svg className="h-8 w-8 text-white mr-5 mt-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                      </svg>
+                    </button>
                   </div>
                 </div>
 
                 <hr className="border-bg-[#343638]" />
 
                 {/* <!--first person who to follow-->  */}
-                {/* <div className="flex flex-shrink-0">
-                    <div className="flex-1 ">
-                        <div className="flex items-center w-48">
-                          <div>
-                              <img className="inline-block h-10 w-auto rounded-full ml-4 mt-2" src="https://pbs.twimg.com/profile_images/1121328878142853120/e-rpjoJi_bigger.png" alt="" />
-                          </div>
-                          <div className="ml-3 mt-3">
-                              <p className="text-base leading-6 font-medium text-white">
-                                Sonali Hirave
-                              </p>
-                              <p className="text-sm leading-5 font-medium text-gray-400 group-hover:text-gray-300 transition ease-in-out duration-150">
-                                @ShonaDesign
-                              </p>
-                          </div>
+                { (recommendStatus === 'success') &&
+                  <>
+                    { recommended.users.slice(0,8).map((user: any) => (
+                      <div className="text-white rounded-md p-1 m-1 hover:bg-[#343638] clear-both overflow-hidden">
+                        <div>
+                          <Link href={"/user/" + user.pk}>
+                            <span className="inline-block pl-2 float-left">
+                              <Image className="inline-block h-12 w-12 rounded-full" src={user.profile_pic_url} width="100" height="100" alt="" />
+                            </span>
+                            <span className="inline-block pl-2 float-left">
+                              <span className="block">@{user.username}</span>
+                              <span className="block">{user.full_name}</span>
+                            </span>
+                          </Link>
                         </div>
-                    </div>
-                    <div className="flex-1 px-4 py-2 m-2">
-                        <a href="" className=" float-right">
-                        <button className="bg-transparent hover:bg-gray-500 text-white font-semibold hover:text-white py-2 px-4 border border-white hover:border-transparent rounded-full">
-                        Follow
-                        </button>  
-                        </a>
-                    </div>
-                  </div>
-                  <hr className="border-gray-600" /> */}
+                      </div>
+                      
+                    ))}
+                    <hr className="border-gray-600" />
+                  </>
+                }
 
+                {/*
                 <div className="flex">
                   <div className="flex-1 p-4">
                     <h2 className="px-4 ml-2 w-48 font-bold text-gray-400">
@@ -246,22 +274,25 @@ export default function AppWrapper({
                     </h2>
                   </div>
                 </div>
+                */}
               </div>
 
-              <div className="flow-root text-center inline pt-4">
-                <div className="flex-2">
-                  <div className="text-sm leading-6 font-medium text-gray-600">
-                    <a href="https://github.com/stevenlafl/threads-web-client" target="_blank">threads-web-client</a>
-                    { version && 
-                      <div className={ version['update'] ? 'text-red-400' : ''}>
-                        current: { version['current'] } | latest: { version['latest'] }
-                        <br/>
-                        ({ version['update'] ? 'update available' : 'up to date' })
-                      </div>
-                    }
+              { (versionStatus === 'success') &&
+                <div className="flow-root text-center inline pt-4">
+                  <div className="flex-2">
+                    <div className="text-sm leading-6 font-medium text-gray-600">
+                      <a href="https://github.com/stevenlafl/threads-web-client" target="_blank">threads-web-client</a>
+                      { version && 
+                        <div className={ version['update'] ? 'text-red-400' : ''}>
+                          current: { version['current'] } | latest: { version['latest'] }
+                          <br/>
+                          ({ version['update'] ? 'update available' : 'up to date' })
+                        </div>
+                      }
+                    </div>
                   </div>
                 </div>
-              </div>
+              }
             </div>
           </div>
         </div>
