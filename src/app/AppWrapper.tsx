@@ -2,8 +2,9 @@
 
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { usePathname } from "next/navigation";
 
 import TimeAgo from 'javascript-time-ago'
 import en from 'javascript-time-ago/locale/en.json'
@@ -19,6 +20,8 @@ export default function AppWrapper({
 }: {
   children: React.ReactNode;
 }) {
+  
+  const pathname = usePathname()
 
   const token = useSelector(selectToken);
   const loggedIn = useSelector(selectAuthState);
@@ -34,22 +37,20 @@ export default function AppWrapper({
     }
   }
 
-  const { pushState, replaceState } = window.history;
-
-  window.history.pushState = function (...args) {
-    pushState.apply(window.history, args);
-        window.dispatchEvent(new Event('pushState'));
-    };
-
-  window.history.replaceState = function (...args) {
-    replaceState.apply(window.history, args);
-    window.dispatchEvent(new Event('replaceState'));
-  };
-
-  window.addEventListener('navigate', setCurrentPage);
-  window.addEventListener('popstate', setCurrentPage);
-  window.addEventListener('replaceState', setCurrentPage);
-  window.addEventListener('pushState', setCurrentPage);
+  useEffect(() => {
+    if (pathname) {
+      let matches = pathname.match(/^\/([^\/]*)/);
+      if (matches) {
+        setOnPage(matches[1] ? matches[1] : 'home');
+      }
+      else {
+        setOnPage('home');
+      }
+    }
+    else {
+      setOnPage('home')
+    }
+  }, [pathname]);
 
   const {data: version, status, error} = useQuery(
     ['version'],
@@ -69,6 +70,7 @@ export default function AppWrapper({
       <div>
         <div className="flex max-w-screen-xl w-screen">
           <div className="w-1/5 text-white py-4 h-1/3 mr-10">
+          { onPage }
             <div className="fixed">
               {/* <!--left menu--> */}
               <svg
