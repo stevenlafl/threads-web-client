@@ -1,29 +1,31 @@
 "use client";
 
-import { useState } from 'react';
 import NotificationItem from './NotificationItem';
 
-
 import useFetcher from '@/hooks/useFetcher';
-import { InView } from 'react-intersection-observer'
 import {
   useInfiniteQuery,
 } from '@tanstack/react-query'
+import useInfiniteScroll from '@/hooks/infiniteScroll';
 
 export default function Page(props: any) {
 
   let token = props.token;
 
-  const [nextMaxId, setNextMaxId] = useState(null as string | null);
-  const [firstRecordTime, setFirstRecordTime] = useState(null as string | null);
-
   const fetcher = useFetcher();
+
+  useInfiniteScroll(() => {
+    if (status === 'success' && !isFetching && hasNextPage) {
+      fetchNextPage();
+    }
+  });
 
   const {
     status,
     data,
     error,
     hasNextPage,
+    isFetching,
     fetchNextPage,
     refetch
   } = useInfiniteQuery(
@@ -52,9 +54,6 @@ export default function Page(props: any) {
       let newNot = JSON.parse(JSON.stringify(response));
       newNot.old_stories = [...response.new_stories, ...response.old_stories]; 
       newNot.new_stories = [];
-
-      setNextMaxId(response.next_max_id);
-      setFirstRecordTime(response.pagination_first_record_timestamp)
 
       const newItems: {
         items: any[],
@@ -123,19 +122,6 @@ export default function Page(props: any) {
           </>
         )}
       </div>
-
-      {status !== 'loading' && 
-        <InView as="div" onChange={inView => {
-          if (inView && hasNextPage) {
-            fetchNextPage({
-              pageParam: {
-                max_id: null,
-                firstRecordTime: null,
-              },
-            })
-          }
-        }}/>
-      }
     </>
   )
 }

@@ -6,11 +6,11 @@ import PostForm from './PostForm';
 import ScrollToTop from 'react-scroll-to-top';
 
 import useFetcher from '@/hooks/useFetcher';
-import { InView } from 'react-intersection-observer'
 import {
   useInfiniteQuery,
   useQueryClient,
 } from '@tanstack/react-query'
+import useInfiniteScroll from '@/hooks/infiniteScroll';
 
 export default function Feed(props: any) {
   const token = props.token;
@@ -27,11 +27,18 @@ export default function Feed(props: any) {
   const queryClient = useQueryClient()
   const fetcher = useFetcher();
 
+  useInfiniteScroll(() => {
+    if (status === 'success' && !isFetching && hasNextPage) {
+      fetchNextPage();
+    }
+  });
+
   const {
     status,
     data,
     error,
     hasNextPage,
+    isFetching,
     fetchNextPage,
     refetch,
     remove,
@@ -100,18 +107,6 @@ export default function Feed(props: any) {
 
   const addPost = (newPost: any) => {
 
-    // const newPost = <FeedItem key={item.id} token={token} item={{ posts: [item] }} />
-    // setItems(prevItems => [newPost, ...prevItems])
-    // let newFeed = JSON.parse(JSON.stringify(prevFeed));
-
-    // console.log([threadData, item]);
-    // newFeed.items = [{
-    //   threaded_items: [threadData, item],
-    //   posts: [threadData, item]
-    // },
-    // ...prevFeed.items];
-    // dispatch(setFeed(newFeed));
-
     // Create a query key based on your existing key
     const queryKey = ['feed', { user_id: user_id, post_id: post_id }];
 
@@ -145,20 +140,11 @@ export default function Feed(props: any) {
     })
   }
 
-  // useEffect(() => {
-  //   if (inView && status == 'success' && hasNextPage && !isFetching) {
-  //     console.log(status, hasNextPage, isFetching);
-  //     fetchNextPage({
-  //       pageParam: null,
-  //     })
-  //   }
-  // }, [inView])
-
   return (
     <>
       {(post_id) &&
         <div>
-          { (status === 'success') &&
+          { (status === 'success' && threadData !== null) &&
               <FeedItem key={threadData.containing_thread.id} token={token} item={threadData.containing_thread} />
           }
         </div>
@@ -169,7 +155,6 @@ export default function Feed(props: any) {
         }
         <hr className="border-b-gray-800" />
       </div>
-      {(!post_id) &&
         <button className="text-white float-right" onClick={() => {
           remove();
           refetch({
@@ -180,7 +165,6 @@ export default function Feed(props: any) {
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
           </svg>
         </button>
-      }
       <div>
         {status === 'loading' ? (
           <p className="text-white text-center">Loading...</p>
@@ -204,16 +188,6 @@ export default function Feed(props: any) {
           svgPath="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm37.66-101.66a8,8,0,0,1-11.32,11.32L136,107.31V168a8,8,0,0,1-16,0V107.31l-18.34,18.35a8,8,0,0,1-11.32-11.32l32-32a8,8,0,0,1,11.32,0Z"
           className='scroll-to-top flex items-center justify-center'
         />
-
-        {status !== 'loading' && 
-          <InView as="div" initialInView onChange={inView => {
-            if (inView && hasNextPage) {
-              fetchNextPage({
-                pageParam: null,
-              })
-            }
-          }}/>
-        }
       </div>
     </>
   )
