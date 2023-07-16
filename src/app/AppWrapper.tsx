@@ -267,7 +267,7 @@ export default function AppWrapper({
                 ) : (
                   <>
                     { recommended.users.slice(0,8).map((user: any) => (
-                      <div className="text-white rounded-md p-1 m-1 hover:bg-[#343638] clear-both overflow-hidden">
+                      <div className="text-white rounded-md p-1 m-1 hover:bg-[#343638] clear-both overflow-hidden" key={user.pk}>
                         <div>
                           <Link href={"/user/" + user.pk}>
                             <span className="inline-block pl-2 float-left">
