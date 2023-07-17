@@ -30,7 +30,7 @@ export default function UserItem(props: any) {
       const response = await fetcher('/api/' + (isFollowing ? 'un' : '') + 'follow', {
         user_id: user.pk,
       });
-      if (response.status === 'ok') {
+      if (response === true) {
         setFollowing(!isFollowing);
       }
     } catch (error) {
@@ -44,7 +44,7 @@ export default function UserItem(props: any) {
       const response = await fetcher('/api/' + (isMuting ? 'un' : '') + 'mute', {
         user_id: user.pk,
       });
-      if (response.status === 'ok') {
+      if (response === true) {
         setMuting(!isMuting);
       }
     } catch (error) {
@@ -58,7 +58,7 @@ export default function UserItem(props: any) {
       const response = await fetcher('/api/' + (isBlocking ? 'un' : '') + 'block', {
         user_id: user.pk,
       });
-      if (response.status === 'ok') {
+      if (response === true) {
         setBlocking(!isBlocking);
       }
     } catch (error) {
@@ -71,7 +71,6 @@ export default function UserItem(props: any) {
       {(user) && 
         <div>
           <div className="p-4">
-            {(user.pk != my_user_id && feedLoaded) && 
               <div className="relative flex w-full">
                   {/* <!-- Avatar --> */}
                   <div className="flex flex-1">
@@ -82,39 +81,42 @@ export default function UserItem(props: any) {
                           </div>
                       </div>
                   </div>
-                  {/* <!-- Follow Button --> */}
-                  <div className="flex flex-col text-right mt-20">
-                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={followAction}>
-                        {(isFollowing) ? 
-                          'Unfollow'
-                          :
-                          'Follow'
-                          }
-                      </button>
-                  </div>
-                  {/* <!-- Follow Button --> */}
-                  <div className="flex flex-col text-right mt-20">
-                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={muteAction}>
-                        {(isMuting) ? 
-                          'Unmute'
-                          :
-                          'Mute'
-                          }
-                      </button>
-                  </div>
-                  {/* <!-- Follow Button --> */}
-                  <div className="flex flex-col text-right mt-20">
-                      <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={blockAction}>
-                        {(isBlocking) ? 
-                          'Unblock'
-                          :
-                          'Block'
-                          }
-                      </button>
-                  </div>
+                  {(user.pk != my_user_id && feedLoaded) &&
+                    <>
+                      {/* <!-- Follow Button --> */}
+                      <div className="flex flex-col text-right mt-20">
+                          <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={followAction}>
+                            {(isFollowing) ? 
+                              'Unfollow'
+                              :
+                              'Follow'
+                              }
+                          </button>
+                      </div>
+                      {/* <!-- Follow Button --> */}
+                      <div className="flex flex-col text-right mt-20">
+                          <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={muteAction}>
+                            {(isMuting) ? 
+                              'Unmute'
+                              :
+                              'Mute'
+                              }
+                          </button>
+                      </div>
+                      {/* <!-- Follow Button --> */}
+                      <div className="flex flex-col text-right mt-20">
+                          <button className="flex justify-center  max-h-max whitespace-nowrap focus:outline-none  focus:ring  rounded max-w-max border bg-transparent border-blue-500 text-blue-500 hover:border-blue-800 hover:border-blue-800 flex items-center hover:shadow-lg font-bold py-2 px-4 rounded-full mr-0 ml-auto" onClick={blockAction}>
+                            {(isBlocking) ? 
+                              'Unblock'
+                              :
+                              'Block'
+                              }
+                          </button>
+                      </div>
+                  </>
+                  }
               </div>
 
-              }
       
               {/* <!-- Profile info --> */}
               <div className="space-y-1 justify-center w-full mt-3 ml-3">

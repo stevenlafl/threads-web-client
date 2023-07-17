@@ -1,11 +1,11 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import * as semver from 'semver';
-import { Client } from '@threadsjs/threads.js';
+import { ThreadsAPI } from 'threads-api';
 import { setTimeout } from 'timers/promises';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, post_id } = req.body;
+  const { token, my_device_id, my_user_id, post_id } = req.body;
   
   let payload: any = {};
 
@@ -24,7 +24,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     }
     catch (e: any) {
-      payload['error'] = e.message;
+      payload = e.data ? e.data : {
+        'error': e.message
+      };
     }
   }
 

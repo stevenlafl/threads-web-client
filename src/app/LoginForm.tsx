@@ -1,6 +1,6 @@
 "use client";
 
-import { setAuthState, setUserName, setUserId, setToken } from '@/store/authSlice';
+import { setAuthState, setUserName, setUserId, setToken, setDeviceId } from '@/store/authSlice';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 
@@ -24,10 +24,11 @@ export default function LoginForm() {
     }).then((res) => res.json());
 
     if (response.token) {
-      dispatch(setToken(response.token));
-      dispatch(setAuthState(true));
+      dispatch(setDeviceId(response.deviceId));
       dispatch(setUserName(e.target.username.value));
       dispatch(setUserId(response.userId));
+      dispatch(setToken(response.token));
+      dispatch(setAuthState(true));
       router.refresh();
     }
   }

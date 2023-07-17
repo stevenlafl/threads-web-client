@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from '@threadsjs/threads.js';
+import { ThreadsAPI } from 'threads-api';
 import { setTimeout } from 'timers/promises';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, user_id } = req.body;
+  const { token, my_device_id, my_user_id, user_id } = req.body;
   
   let payload: any = {};
 
@@ -15,10 +15,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   else {
     try {
-      const client = new Client({ token });
-      payload = await client.friendships.unfollow(user_id);
+      const client = new ThreadsAPI({ verbose: true, token, userID: my_user_id, deviceID: my_device_id });
+      payload = await client.unfollow(user_id);
     } catch (e: any) {
-      payload['error'] = e.message;
+      payload = e.data ? e.data : {
+        'error': e.message
+      };
     }
   }
 

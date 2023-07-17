@@ -1,6 +1,6 @@
 // @see: https://medium.com/@oherterich/creating-a-textarea-with-dynamic-height-using-react-and-typescript-5ed2d78d9848
 
-import { selectAuthState, selectToken, selectUserId, setAuthState, setChallengeRequired } from "@/store/authSlice";
+import { selectAuthState, selectChallengeRequired, selectDeviceId, selectToken, selectUserId, setAuthState, setChallengeRequired } from "@/store/authSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -13,10 +13,12 @@ const useFetcher = () => {
   const isLoggedIn = useSelector(selectAuthState);
   const token = useSelector(selectToken);
   const my_user_id = useSelector(selectUserId);
+  const device_id = useSelector(selectDeviceId);
+  const challenge_required = useSelector(selectChallengeRequired);
 
   return async (endpoint: string, data: Object = {}) => {
     
-    if (!isLoggedIn || !token || !my_user_id)  {
+    if (!isLoggedIn || !token || !my_user_id || challenge_required)  {
       return false;
     }
     let response = await fetch(endpoint, {
@@ -24,6 +26,7 @@ const useFetcher = () => {
       body: JSON.stringify({
         token: token,
         my_user_id: my_user_id,
+        my_device_id: device_id,
         ...data
       }),
       headers: {

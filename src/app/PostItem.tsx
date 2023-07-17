@@ -63,7 +63,7 @@ export default function PostItem(props: any) {
       response = await fetcher('/api/unlike', {
         post_id: id,
       });
-      if (response.status === 'ok') {
+      if (response === true) {
         setLiked(false);
         setLikeCount(likeCount - 1);
       }
@@ -73,7 +73,7 @@ export default function PostItem(props: any) {
         post_id: id,
       });
 
-      if (response.status === 'ok') {
+      if (response === true) {
         setLiked(true);
         setLikeCount(likeCount + 1);
       }
@@ -89,7 +89,7 @@ export default function PostItem(props: any) {
           post_id: id,
       });
 
-      if (response.status === 'ok') {
+      if (response === true) {
         setHasReposted(false);
       }
     }
@@ -98,7 +98,7 @@ export default function PostItem(props: any) {
         post_id: id,
       });
 
-      if (response.status === 'ok') {
+      if (response === true) {
         setHasReposted(true);
       }
     }

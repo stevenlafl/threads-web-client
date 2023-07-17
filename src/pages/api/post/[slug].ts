@@ -1,12 +1,12 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from '@threadsjs/threads.js';
+import { ThreadsAPI } from 'threads-api';
 import { setTimeout } from 'timers/promises';
 
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
  
-  const { token, max_id } = req.body;
+  const { token, my_device_id, my_user_id, max_id } = req.body;
   const post_id = req.query.slug as string;
 
   // console.log(token);
@@ -21,11 +21,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   else {
     try {
-      const client = new Client({ token });
+      const client = new ThreadsAPI({ verbose: true, token, userID: my_user_id, deviceID: my_device_id });
 
-      payload = await client.posts.fetch(post_id, max_id);
+      payload = await client.getThreadsLoggedIn(post_id, max_id);
     } catch (e: any) {
-      payload['error'] = e.message;
+      payload = e.data ? e.data : {
+        'error': e.message
+      };
     }
   }
 

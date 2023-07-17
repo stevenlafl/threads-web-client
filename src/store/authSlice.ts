@@ -8,6 +8,7 @@ export interface AuthState {
   authState: boolean;
   challengeRequired: boolean;
   token: string | null;
+  deviceId: string | null;
   userId: string | null;
   userName: string | null;
 }
@@ -18,6 +19,7 @@ const initialState: AuthState = {
   challengeRequired: false,
   token: null,
   userId: null,
+  deviceId: null,
   userName: null,
 };
 
@@ -32,6 +34,9 @@ export const authSlice = createSlice({
     },
     setToken(state, action) {
       state.token = action.payload;
+    },
+    setDeviceId(state, action) {
+      state.deviceId = action.payload;
     },
     setUserId(state, action) {
       state.userId = action.payload;
@@ -62,6 +67,7 @@ export const authSlice = createSlice({
 export const {
   setAuthState,
   setToken,
+  setDeviceId,
   setUserId,
   setUserName,
   setChallengeRequired,
@@ -70,6 +76,7 @@ export const {
 export const selectAuthState = (state: AppStore) => state.auth.authState;
 export const selectChallengeRequired = (state: AppStore) => state.auth.challengeRequired;
 export const selectToken = (state: AppStore) => state.auth.token;
+export const selectDeviceId = (state: AppStore) => state.auth.deviceId;
 export const selectUserId = (state: AppStore) => state.auth.userId;
 export const selectUserName = (state: AppStore) => state.auth.userName;
 

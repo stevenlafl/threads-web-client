@@ -1,10 +1,10 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from '@threadsjs/threads.js';
+import { ThreadsAPI } from 'threads-api';
 import { setTimeout } from 'timers/promises';
 import * as fs from 'fs';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-  const { token, text, post_id } = req.body;
+  const { token, my_device_id, my_user_id, text, post_id } = req.body;
   
   let payload: any = {};
 
@@ -15,11 +15,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   else {
     try {
-      const client = new Client({ token });
+      const client = new ThreadsAPI({ verbose: true, token, userID: my_user_id, deviceID: my_device_id });
       
-      payload = await client.posts.quote(post_id, {post: post_id, contents: text});
+      payload = await client.publish({quotedPostID: post_id, text: text});
     } catch (e: any) {
-      payload['error'] = e.message;
+      payload = e.data ? e.data : {
+        'error': e.message
+      };
     }
   }
 

@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { Client } from '@threadsjs/threads.js';
+import { ThreadsAPI } from 'threads-api';
 import { setTimeout } from 'timers/promises';
 import * as fs from 'fs';
 
@@ -15,12 +15,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
   else {
     try {
-      let client = new Client({});
-      await client.login(username, password);
-      payload['token'] = client.token;
-      payload['userId'] = client.userId;
+      let client = new ThreadsAPI({verbose: true, username, password});
+      payload['token'] = await client.getToken();
+      //payload['userId'] = await client.getCurrentUserID();
+      payload['deviceId'] = client.deviceID;
     } catch (e: any) {
-      payload['error'] = e.message;
+      payload = e.data ? e.data : {
+        'error': e.message
+      };
     }
   }
 

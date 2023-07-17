@@ -15,7 +15,6 @@
     "@tanstack/react-query": "^4.29.23",
     "@tanstack/react-query-devtools": "^4.29.23",
     "@tanstack/react-query-persist-client": "^4.29.23",
-    "@threadsjs/threads.js": "1.8.1",
     "autoprefixer": "^10.4.14",
     "emoji-picker-react": "^4.4.9",
     "eslint": "8.44.0",
@@ -35,6 +34,7 @@
     "semver": "^7.5.4",
     "sharp": "^0.32.2",
     "tailwindcss": "^3.3.3",
+    "threads-api": "file:../threads-api/threads-api",
     "typescript": "5.1.6"
   },
   "devDependencies": {
