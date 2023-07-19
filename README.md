@@ -73,10 +73,15 @@ Todo:
 7. ~~Add reposting~~
 8. Add quote posting
 9. Add account switching
-10. Follow/unfollow
-11. User search
-12. Recommended users sidebar
-13. ???
+10. ~~Follow/unfollow~~
+11. ~~Mute/Unmute~~
+12. ~~Block/unblock~~
+13. ~~Emoji picker~~
+14. ~~User search~~
+15. ~~Recommended users sidebar~~
+16. Optimized/pretty post formatting
+17. Character limiter on text entry for posting
+18. ???
 
 ### Credits
 
